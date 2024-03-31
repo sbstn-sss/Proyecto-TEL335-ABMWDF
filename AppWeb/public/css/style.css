@@ -109,3 +109,28 @@ img {
   outline: 3px solid #F7AE00; /* Hacer más visible el foco para accesibilidad */
   outline-offset: 2px;
 }
+
+@font-face {
+  font-family: 'urban-jungle-demo';
+  src: url('../fonts/urban-jungle-demo.ttf');
+  font-weight: bolder;
+}
+
+.nombre-grupo {
+  transition-duration: 1s;
+  color:#F7AE00
+}
+.nombre-grupo:hover {
+  font-family: 'urban-jungle-demo';
+  font-size: 64px;
+  letter-spacing:16px;
+  background-image: url('../img/fire.gif');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  -webkit-background-text-fill-color: transparent;
+  -webkit-font-smoothing: antialiased;
+  color:rgba(0, 0, 0, 0);
+  text-shadow: 0px 0px 1px #f7ad0056;
+}
