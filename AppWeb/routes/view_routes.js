@@ -23,7 +23,7 @@ router
         await ctx.render('integrantes', {
             title: "Integrantes del Grupo",
             header: "WEBOSFIRE"
-        });
+        }); 
     })
     .get('/cancha', async (ctx, next) => {
         await ctx.render('cancha', {

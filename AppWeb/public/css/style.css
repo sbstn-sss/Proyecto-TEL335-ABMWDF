@@ -117,8 +117,8 @@ img {
 }
 
 .nombre-grupo {
-  transition-duration: 1s;
-  color:#F7AE00
+  transition-duration: 0.5s;
+  color:#004B85
 }
 .nombre-grupo:hover {
   font-family: 'urban-jungle-demo';
