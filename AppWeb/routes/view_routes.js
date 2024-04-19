@@ -8,7 +8,7 @@ const router = new Router();
 // rutas de las vistas
 router
     .get('/', async (ctx, next) => {
-        await ctx.render('index', {
+        await ctx.render('inicio', {
             title: "Gestor de Canchas USM",
             header: "Proyecto TEL335"
         });
@@ -30,6 +30,7 @@ router
             title: "Cancha"
         });
     })
+
 
 
 
