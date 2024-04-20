@@ -38,7 +38,7 @@ router
     .get('/login', async (ctx, next) => {
         await ctx.render('login', {
             title: "Acceso USM",
-            header: "Login",
+            header: "Acceso USM",
             header_class: ""
         });
     })  

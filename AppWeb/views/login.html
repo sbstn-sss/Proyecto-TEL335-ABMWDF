@@ -1,47 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%- title %></title>
-    <link rel="stylesheet" href="../css/style.css">
-</head>
+<% include head.html %>
 <body>
-    
-    <header>
-        <h1 class=""><%- header %></h1>
-        <nav>
-          <a href="/">Inicio</a>
-          <a href="/acerca">Acerca de</a>
-          <a href="/integrantes">Integrantes del grupo</a>
-        </nav>
-    </header>
+<% include header.html %>
+    <div class="container login-container">
 
-
-    <div class="container">
-        <span class="icon-close"><ion-icon name="close-sharp"></ion-icon></span>
-
-        <div class="form-box login">
-            <h2>Login</h2>
+            <div class="login-title">
+                <h2>Log In</h2>
+            </div>
             <form action="#">
                 <div class="input-box">
-                    <span class="icon"><ion-icon name="mail-sharp"></ion-icon></span>
-                    <input type="email" required>
-                    <label>Email</label>
+                    <p class="input-box__text">Email</p>
+                    <input class ="login-input" type="email" required>
+                    
                 </div>
                 <div class="input-box">
-                    <span class="icon"><ion-icon name="lock-closed-sharp"></ion-icon></span>
-                    <input type="password" required>
-                    <label>contraseña</label>
-                </div>
-                <div class="remember-forgot">
-                    <label><input type="checkbox"> Remember me</label>
-                </div>
-                <button type="submit" class="minecraft_button">Login</button>
-                <div class="login-register">
-                    <p>olvido la contraseña <a href="#" class="register-link">registrarme</a></p>
+                    <p class="input-box__text">password</p>
+                    <input class="login-input" type="password" required>
                 </div>
 
+                <div class="remember-button">
+                    <label class="remember">
+
+                        <input type="checkbox">
+                        <span class="remember__checkmark"></span>
+                        Remember me
+                    </label>
+                    
+                    <button type="submit" class="minecraft_button">
+                        Log In
+                    </button>
+                </div>
             </form>
         </div>
 

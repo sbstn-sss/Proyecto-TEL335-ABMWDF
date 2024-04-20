@@ -59,6 +59,8 @@ a {
 a:hover {
   color: #004B85; /* Añadir un poco de interactividad */
   text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
 }
 
 /* Cabecera y Navegación */
@@ -141,12 +143,13 @@ img {
 }
 
 /* Ajustes adicionales para mejorar la accesibilidad y estética */
+/*
 :focus {
-  outline: 3px solid #F7AE00; /* Hacer más visible el foco para accesibilidad */
+  outline: 3px solid #99999959;
   outline-offset: 2px;
 }
 
-
+*/
 .nombre-grupo {
   transition-duration: 0.5s;
   color:#004B85
@@ -174,4 +177,112 @@ img {
   font-size: larger;
   padding: 20px 50px;
   margin: 0;
+}
+
+.login-container {
+  align-items:start;
+}
+
+.login-title {
+  display: flex;
+}
+
+.minecraft_button{
+  padding: 7px 15px;
+  font-size: large;
+  background-color: #000000;
+  background-image:url(https://media.minecraftforum.net/attachments/353/519/638398842855829311.jpeg) ;
+  background-size: cover;
+  cursor: pointer;
+  border-width: 1px;
+  border-style: outset;
+  transition-duration: 0.2s;
+
+  color: white;
+  
+  -webkit-text-stroke: 4px rgb(83, 83, 83);
+  paint-order: stroke fill;
+}
+
+.minecraft_button:hover{
+  box-shadow: 1px 1px 3px #00000069; 
+  
+  scale: 102.5%;
+}
+
+.minecraft_button:active{
+  opacity: 0.85;
+  
+}
+
+
+
+.input-box {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+
+
+.login-input {
+  border-width: 3px;
+  border-style: solid;
+  border-radius: 0;
+  border-color: #b3b0ab;
+  padding: 10px 10px;
+  color:#004B85;
+  font-size: medium;
+}
+
+.remember {
+  display: flex;
+  flex-direction: row;
+  column-gap: 10px;
+  align-items: center;
+  color: #004B85;
+  font-size: normal;
+  margin-left: 5px;
+}
+
+
+.remember input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height:  13px;
+  width: 13px;
+}
+
+
+
+
+.remember__checkmark {
+  top: 0;
+  left: 0;
+  padding: 5px;
+  height: 13px;
+  width: 13px;
+  background-color: #eee;
+}
+
+.remember:hover input ~ .remember__checkmark {
+  background-color: #b3b0ab;
+  outline: 3px solid #eee;
+  outline-offset: 2px;
+}
+
+/* cuando el checkbox esta checkeado */
+.remember input:checked ~ .remember__checkmark {
+  background-color: #004B85;
+  outline: 3px solid #004B85;
+  outline-offset: 2px;
+
+}
+
+.remember-button {
+  display: flex;
+  flex-direction: row;
+  column-gap: 80px;
+  justify-content: space-between;
 }
