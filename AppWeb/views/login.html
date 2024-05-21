@@ -1,34 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
-<% include head.html %>
-<body>
-<% include header.html %>
-    <div class="container login-container">
 
-            <div class="login-title">
-                <h2>Log In</h2>
-            </div>
-            <form action="#">
+<header>
+
+    <title>Login</title>
+    <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="fuentes/Minecraft.ttf">
+
+</header>
+
+<body>
+
+    <div class="encabezado-login">
+        <div class="izquierdo">
+            <button class= "INICIO">INICIO</button>
+        </div>
+        <div class="centro">
+
+            <p class="Letra">Gestor de Canchas USM</p>
+            <button class="ACERCA"> ACERCA</button>
+
+        </div>
+        <div class="derecho">
+            <button class="ACCESO"> ACCESO</button>
+        </div>
+
+    </div>
+
+    <div class="contenedor">
+
+            <form action="#" class = "formulario">
+
+                <div class= "Letra_form">
+                    <h2>Log In</h2>
+                </div>
+
                 <div class="input-box">
-                    <p class="input-box__text">Email</p>
-                    <input class ="login-input" type="email" required>
+                    <p class = "Letra_form">Cuenta USM</p>
+                    <input class ="Input-form" type="email" required>
                     
                 </div>
                 <div class="input-box">
-                    <p class="input-box__text">password</p>
-                    <input class="login-input" type="password" required>
+                    <p class= "Letra_form">password</p>
+                    <input class="Input-form" type="password" required>
                 </div>
 
                 <div class="remember-button">
                     <label class="remember">
 
-                        <input type="checkbox">
+                        <!--<input type="checkbox">
                         <span class="remember__checkmark"></span>
-                        Remember me
-                    </label>
+                        Remember me-->
+                    </label> 
                     
                     <button type="submit" class="minecraft_button">
-                        Log In
+                        ACCEDER
                     </button>
                 </div>
             </form>
