@@ -1,62 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<header>
-
-    <title>Login</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%- title %></title>
     <link rel="stylesheet" href="css/login.css">
-    <link rel="stylesheet" href="fuentes/Minecraft.ttf">
-
-</header>
-
+</head>
 <body>
+    
+    <header>
+        <h1 class="">Login</h1>
+        <nav>
+          <a href="/">Inicio</a>
+          <a href="/acerca">Acerca de</a>
+          <a href="/integrantes">Integrantes del grupo</a>
+        </nav>
+    </header>
 
-    <div class="encabezado-login">
-        <div class="izquierdo">
-            <button class= "INICIO">INICIO</button>
-        </div>
-        <div class="centro">
 
-            <p class="Letra">Gestor de Canchas USM</p>
-            <button class="ACERCA"> ACERCA</button>
+    <div class="container">
+        <span class="icon-close"><ion-icon name="close-sharp"></ion-icon></span>
 
-        </div>
-        <div class="derecho">
-            <button class="ACCESO"> ACCESO</button>
-        </div>
-
-    </div>
-
-    <div class="contenedor">
-
-            <form action="#" class = "formulario">
-
-                <div class= "Letra_form">
-                    <h2>Log In</h2>
-                </div>
-
+        <div class="form-box login">
+            <h2>Login</h2>
+            <form action="#">
                 <div class="input-box">
-                    <p class = "Letra_form">Cuenta USM</p>
-                    <input class ="Input-form" type="email" required>
-                    
+                    <span class="icon"><ion-icon name="mail-sharp"></ion-icon></span>
+                    <input type="email" required>
+                    <label>Email</label>
                 </div>
                 <div class="input-box">
-                    <p class= "Letra_form">password</p>
-                    <input class="Input-form" type="password" required>
+                    <span class="icon"><ion-icon name="lock-closed-sharp"></ion-icon></span>
+                    <input type="password" required>
+                    <label>contraseña</label>
+                </div>
+                <div class="remember-forgot">
+                    <label><input type="checkbox"> Remember me</label>
+                </div>
+                <button type="submit" class="minecraft_button">Login</button>
+                <div class="login-register">
+                    <p>olvido la contraseña <a href="#" class="register-link">registrarme</a></p>
                 </div>
 
-                <div class="remember-button">
-                    <label class="remember">
-
-                        <!--<input type="checkbox">
-                        <span class="remember__checkmark"></span>
-                        Remember me-->
-                    </label> 
-                    
-                    <button type="submit" class="minecraft_button">
-                        ACCEDER
-                    </button>
-                </div>
             </form>
         </div>
 
