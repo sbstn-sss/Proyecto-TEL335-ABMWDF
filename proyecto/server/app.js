@@ -1,33 +1,38 @@
 // import modules
 const express = require('express');
-const mongoose =require('mongoose');
 const morgan = require('morgan');
+const mongoSanitize = require('express-mongo-sanitize');
 const cors = require('cors');
-require("dotenv").config();
+const cookieParser = require('cookie-parser');
+
+
+
+const userRouter = require('./routes/user_routes');
+const globalErrorHandler = require('./controllers/errorController');
 
 // app
 const app = express();
-// db
-mongoose
-.connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-})
-.then(() => console.log("DB CONNECTED"))
-.catch((err) => console.log("DB CONNECTION ERROR", err));
+
 
 // middleware
 app.use(morgan("dev"));
 app.use(cors({origin: true, credentials: true}));
 
+// Body parser, reading data from body into req.body
+app.use(express.json({ limit: '10kb' })); // limit of memory of the request body
+app.use(cookieParser());
+
+// Data sanitization against NoSQL query injection
+app.use(mongoSanitize());
+
 // routes
-const testRoutes = require('./routes/test');
-app.use("/", testRoutes);
 
-// port
-const port = process.env.PORT || 8080;
+// usuarios
+app.use('/api/users/', userRouter);
 
-//listener
-const server = app.listen(port, () => 
-    console.log(`Server funcionando en puerto ${port}`)
-);
+
+// global error middleware
+
+app.use(globalErrorHandler);
+
+module.exports = app;
