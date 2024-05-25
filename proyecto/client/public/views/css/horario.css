@@ -164,6 +164,7 @@
     width: 50px;
     height: 25px;
     border-color: #000000;
+    transition: background-color 0.2s;
 }
 
 
@@ -184,6 +185,30 @@
     height: 25px;
     margin-left: 20px;
     margin-bottom: 8px;
+
+}
+
+.minecraft_button{
+    padding: 7px 15px;
+    font-size: large;
+    background-image:url(https://media.minecraftforum.net/attachments/353/519/638398842855829311.jpeg) ;
+    background-size: cover;
+    text-decoration: none;
+}
+
+.minecraft_button:hover{
+
+
+    cursor: pointer;
+    text-decoration: underline;
+
+
+}
+
+.Green_Block:hover{
+
+    background-color: rgb(83, 198, 255);
+    cursor: pointer;
 
 }
 
