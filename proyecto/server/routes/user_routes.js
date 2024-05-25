@@ -15,6 +15,7 @@ router.get('/protected-route', protect, (req, res, next) => {
   });
 
 });
+
 /*
 //PROTECT MIDDLEWARE
 router.use(protect); // is applied to all following routes!!

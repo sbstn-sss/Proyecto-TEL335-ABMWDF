@@ -9,6 +9,22 @@ const usuarioSchema = new mongoose.Schema(
       type: String,
       required: [true, 'Un usuario debe tener nombre']
     },
+    rol: {
+      type: String,
+      unique: true,
+      required: [true, 'Un usuario debe tener rol'],
+      validate: {
+        validator: function (val) {
+          // Expresión regular para validar el formato del rol
+          const rolValido = /^(19[3-9][1-9]|19[3-9]0|200[0-9]|201[0-9]|202[0-4])[0-9]{5}-[0-9]$/;
+          
+          console.log('rol ingresado', val, rolValido.test(val));
+          
+          return rolValido.test(val);
+        },
+        message: 'El rol no es válido',
+      },
+    },
     email: {
       type: String,
       unique: true,

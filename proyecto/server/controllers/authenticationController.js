@@ -51,6 +51,7 @@ exports.signup = catchAsync( async (req, res, next) => {
     'password',
     'passwordConfirm',
     'photo',
+    'rol',
     'role' //el admin debe asignar un rol especial, como defider o admin
   );
 
@@ -85,8 +86,6 @@ exports.login = catchAsync( async (req, res, next) => {
 
   createSendToken(user, 200, res);
 });
-
-
 
 
 
