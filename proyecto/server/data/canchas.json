@@ -1,0 +1,26 @@
+[
+  {
+    "nombre": "Cancha de Futbol 1",
+    "campus": "SJ",
+    "photo": "cancha_1.jpg",
+    "franja_horaria": "1-2:17-18"
+  },
+  {
+    "nombre": "Cancha de Futbol 2",
+    "campus": "SJ",
+    "photo": "cancha_2.jpg",
+    "franja_horaria": "1-2:17-18"
+  },
+  {
+    "nombre": "Cancha de Tenis",
+    "campus": "SJ",
+    "photo": "cancha_3.jpg",
+    "franja_horaria": "1-2:19:20"
+  },
+  {
+    "nombre": "Multicancha",
+    "campus": "SJ",
+    "photo": "cancha_4.jpg",
+    "franja_horaria": "3-4:13-14"
+  }
+]

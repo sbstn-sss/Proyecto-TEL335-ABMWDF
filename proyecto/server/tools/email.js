@@ -12,7 +12,7 @@ const sendEmail = async options => {
   });
   // 2) Define the email options
   const mailOptions = {
-    from: 'Sebastian SSS <admin@usmcanchas.cl>', // cambiar
+    from: 'Don Fede <admin@usmcanchas.cl>', // cambiar
     to: options.email,
     subject: options.subject,
     text: options.message

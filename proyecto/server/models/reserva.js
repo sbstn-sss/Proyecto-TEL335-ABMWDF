@@ -9,6 +9,11 @@ const reservaSchema = new mongoose.Schema(
       ref: 'Usuario',
       required: [true, 'Una reserva esta asociada a un Usuario']
     },
+    id_cancha: { // se puede usar slug en su lugar ********* ( sera mas simple )
+      type: mongoose.Schema.ObjectId, // referencia a id de cancha
+      ref: 'Cancha',
+      required: [true, 'Una reserva esta asociada a una Cancha']
+    },
     bloque: {
       type: String,
       enum: {
@@ -17,8 +22,8 @@ const reservaSchema = new mongoose.Schema(
       },
       required: [true, 'Una reserva necesita obligatoriamente un bloque.']
     },
-    dia_reservado: {
-      type: Date,
+    dia_reservado: { // formato: 'dd-MM-YYYY'
+      type: String,
       required: [true, 'Una reserva debe tener una fecha']
     },
     fecha: {
@@ -54,6 +59,7 @@ const reservaSchema = new mongoose.Schema(
 // 4) pre guardado: guardar hora_inicio, hora_fin del bloque. // por conveniencia (no se calculara a cada rato luego)
 // 3) pre guardado: si el reservante es alumno no se puede reservar mas alla de 14 dias
 
+// pendiente e importante ASEGURARSE QUE EN UN DIA ESPECIFICO LOS BLOQUES SOLO TENGAN MAXIMO UNA RESERVA
 reservaSchema.pre('save', async function(next){ // se guarda el tipo de usuario para hacer las validaciones mas faciles
   
   // usuario 
@@ -145,12 +151,47 @@ reservaSchema.pre('save', function(next){ // asignacion de las horas
   next();
 }); 
 
+reservaSchema.pre('save', function(next){ // validacion de que si el usuario es alumno, que no se reserve para fechas muy futuras(14 dias) o para dias pasados
+  if(this.tipo_usuario == 'profesor') return next();
+
+  // Asegurarse de que this.fecha y this.dia_reservado sean objetos Date
+  const fecha = new Date(this.fecha);
+
+  [dia,mes,year] = this.dia_reservado.split('-').map(Number);
+  
+
+  const diaReservado = new Date(year, mes - 1, dia); // en javascript el mes va del 0 al 11
+
+  console.log(diaReservado.getDate(),diaReservado.getMonth() + 1, diaReservado.getFullYear() );
+
+  // Crear una nueva fecha para this.fecha + 14 días
+  const fechaMas14Dias = new Date(fecha);
+  fechaMas14Dias.setDate(fechaMas14Dias.getDate() + 14);
+
+  console.log(fechaMas14Dias.getDate(), fechaMas14Dias.getMonth() + 1, fechaMas14Dias.getFullYear());
+
+  // Validar si la fecha reservada es válida
+  if (fecha > diaReservado || diaReservado > fechaMas14Dias) {
+    return next(new AppError('Reserva realizada en un día inválido', 402));
+  }
+
+  // Si se sigue, quiere decir que la fecha reservada es válida
+  next();
+});
+
+
 reservaSchema.pre('save', async function(next){  // Validacion si la reserva fue realizada en una hora adecuada
+  [dia,mes,year] = this.dia_reservado.split('-');
+
+  if(this.fecha.getDate() != dia) return next();
+  
   const hours = this.fecha.getHours();
   const minutes = this.fecha.getMinutes();
   const seconds = this.fecha.getSeconds();
 
   const fecha_act_format = new Date(1970, 0, 1, hours, minutes, seconds);
+  
+  console.log(hours, minutes, seconds, ' ---- ', this.hora_final_bloque.getHours(), this.hora_final_bloque.getMinutes(), this.hora_final_bloque.getSeconds());
 
   if (this.hora_final_bloque < fecha_act_format) {
     return next(new AppError('Reserva realizada en una hora invalida', 401));
@@ -159,14 +200,10 @@ reservaSchema.pre('save', async function(next){  // Validacion si la reserva fue
   next();
 });
 
-reservaSchema.pre('save', function(next){ // validacion de que si el usuario es alumno, que no se reserve para fechas muy futuras(14 dias) o para dias pasados
-  //pendiente
-  //utiL:
-  //this.fecha.getDate();
-  //this.fecha.getFullYear();
-  //this.fecha.getMonth();
-  next();
-});
+
+
+// falta que reserva pertenezca a la franja horaria de la cancha
+
 
 
 const Reserva = mongoose.model('Reserva', reservaSchema);

@@ -25,6 +25,13 @@ const canchaSchema = new mongoose.Schema(
   }
 );
 
+
+canchaSchema.pre('save', function(next) {
+  this.slug = slugify(this.nombre, { lower: true });
+
+  next();
+});
+
 const Cancha = mongoose.model('Cancha', canchaSchema);
 
 module.exports = Cancha;
