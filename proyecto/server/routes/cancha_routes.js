@@ -5,7 +5,7 @@ const router = express.Router();
 
 
 // alcance de alumno
-router.post('/', getAllCanchas); // pendiente que el usuario este autenticado (protect)
+router.get('/', getAllCanchas); // pendiente que el usuario este autenticado (protect)
 router.get('/:cancha', getOneCancha);
 
 
