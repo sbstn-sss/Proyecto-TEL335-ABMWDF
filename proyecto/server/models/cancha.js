@@ -5,7 +5,8 @@ const canchaSchema = new mongoose.Schema(
   {
     nombre: {
       type: String,
-      required: [true, 'Una cancha debe tener nombre']
+      required: [true, 'Una cancha debe tener nombre'],
+      unique: true
     },
     slug: String,
     campus:{
@@ -24,7 +25,8 @@ const canchaSchema = new mongoose.Schema(
     toObject: { virtuals: true}
   }
 );
-
+// Definición del índice compuesto para asegurar la unicidad de {id_cancha, dia_reservado, bloque}
+canchaSchema.index({ slug: 1}, { unique: true });
 
 canchaSchema.pre('save', function(next) {
   this.slug = slugify(this.nombre, { lower: true });

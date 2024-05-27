@@ -8,6 +8,7 @@ const cookieParser = require('cookie-parser');
 
 
 const userRouter = require('./routes/user_routes');
+const canchaRouter = require('./routes/cancha_routes');
 const reservaRouter = require('./routes/reserva_routes');
 const globalErrorHandler = require('./controllers/errorController');
 
@@ -31,8 +32,12 @@ app.use(mongoSanitize());
 // usuarios
 app.use('/api/users/', userRouter);
 
+// canchas
+app.use('/api/canchas/', canchaRouter);
+
 // reservas
 app.use('/api/reservas/', reservaRouter);
+
 
 // canchas
 // pendiente ( solo get )

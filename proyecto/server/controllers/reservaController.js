@@ -4,18 +4,48 @@ const sendEmail = require('../tools/email');
 const filterObj = require('../tools/filterObj.js');
 const catchAsync = require('../tools/catchAsync.js');
 const AppError = require('../tools/appError.js');
+const Cancha = require('../models/cancha.js');
+
+
+const getDiasSemana = (lunes) => {
+  const fechas = [];
+
+  [dia,mes,year] = lunes.split('-');
+
+  const lunesDate = new Date(year, mes - 1, dia);
+  //console.log(lunesDate.getDay());
+  if(lunesDate.getDay() != 1) return fechas; // quiere decir que la fecha ingresada no es lunes.
+
+  let fecha = new Date(lunesDate);
+  let dia_fecha, mes_fecha, year_fecha;
+
+
+  for(let i = 0; i < 5; i++){
+    if(i != 0) fecha.setDate(fecha.getDate() + 1); // le sumo uno al dia
+    dia_fecha = fecha.getDate().toString().padStart(2, '0'); // Añade un cero al principio si es menor a 10
+    mes_fecha = (fecha.getMonth() + 1).toString().padStart(2, '0'); // Añade un cero al principio si es menor a 10
+    year_fecha = fecha.getFullYear();
+
+    fechas.push([dia_fecha, mes_fecha, year_fecha].join('-'));
+  }
+  return fechas;
+}
 
 
 // get reservas by dia 
 
 exports.getReservasByFecha = catchAsync(async (req,res,next) =>{
- // PENDIENTE BUSCAR CANCHA POR SLUG de cancha
-  // SDS // 
-  // sdsd // 
-  //dsds//
+  const cancha = await Cancha.findOne({slug: req.params.cancha});
+
+  if(!cancha) return next(new AppError('La cancha ingresada no existe.', 404));
+
+  console.log(cancha);
 
   // recibe fecha en formato dd-MM-YY
-  const reservas = await Reserva.find({dia_reservado: req.params.fecha});
+  const reservas = await Reserva.find({
+    id_cancha: cancha._id, 
+    dia_reservado: req.params.fecha
+  });
 
   // no hay error si no se encuentran reservas, quiere decir que esa semana esta disponible del todo
   res.status(200).json({
@@ -27,7 +57,28 @@ exports.getReservasByFecha = catchAsync(async (req,res,next) =>{
 
 });
 
+// implementar get by semana. ( recibe de parametro el lunes de esa semana ( retorna todas las reservas de ese lunes, hasta el viernes ))
+exports.getReservasBySemana = catchAsync(async (req,res,next) =>{
+  const cancha = await Cancha.findOne({slug: req.params.cancha});
 
+  if(!cancha) return next(new AppError('La cancha ingresada no existe.', 404));
+
+  //console.log(cancha);
+
+  const fechas = getDiasSemana(req.params.lunes);
+  console.log(fechas);
+  // recibe fecha en formato dd-MM-YY
+  const reservas = await Reserva.find({id_cancha: cancha._id, dia_reservado: {$in: fechas}});
+
+  // no hay error si no se encuentran reservas, quiere decir que esa semana esta disponible del todo
+  res.status(200).json({
+    status: 'success',
+    data: {
+      reservas
+    }
+  });
+
+});
 
 exports.createReserva = catchAsync(async (req,res,next) => {
   const filteredBody = filterObj(

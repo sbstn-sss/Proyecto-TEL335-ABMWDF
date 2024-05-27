@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Usuario = require('./usuario');
 const AppError = require('../tools/appError');
+const Cancha = require('./cancha');
 
 const reservaSchema = new mongoose.Schema(
   {
@@ -52,6 +53,8 @@ const reservaSchema = new mongoose.Schema(
   }
 );
 
+// Definición del índice compuesto para asegurar la unicidad de {id_cancha, dia_reservado, bloque}
+reservaSchema.index({ id_cancha: 1, dia_reservado: 1, bloque: 1 }, { unique: true});
 
 // validaciones
 // 1) pre guardado: la reserva debe ser en el futuro
@@ -148,6 +151,9 @@ reservaSchema.pre('save', function(next){ // asignacion de las horas
 
   this.hora_inicio_bloque = horaInicio;
   this.hora_final_bloque = horaFinal;
+
+  //console.log('hora inicio bloque:' ,this.hora_inicio_bloque.getHours(), this.hora_inicio_bloque.getMinutes());
+  //console.log('hora final bloque:' ,this.hora_final_bloque.getHours(), this.hora_final_bloque.getMinutes())
   next();
 }); 
 
@@ -156,23 +162,27 @@ reservaSchema.pre('save', function(next){ // validacion de que si el usuario es 
 
   // Asegurarse de que this.fecha y this.dia_reservado sean objetos Date
   const fecha = new Date(this.fecha);
+  fecha.setHours(0);
+  fecha.setMinutes(0);
+  fecha.setSeconds(0);
+  fecha.setMilliseconds(0);
 
   [dia,mes,year] = this.dia_reservado.split('-').map(Number);
   
 
   const diaReservado = new Date(year, mes - 1, dia); // en javascript el mes va del 0 al 11
 
-  console.log(diaReservado.getDate(),diaReservado.getMonth() + 1, diaReservado.getFullYear() );
+  //console.log(diaReservado.getDate(),diaReservado.getMonth() + 1, diaReservado.getFullYear() );
 
   // Crear una nueva fecha para this.fecha + 14 días
   const fechaMas14Dias = new Date(fecha);
   fechaMas14Dias.setDate(fechaMas14Dias.getDate() + 14);
 
-  console.log(fechaMas14Dias.getDate(), fechaMas14Dias.getMonth() + 1, fechaMas14Dias.getFullYear());
-
+  //console.log(fechaMas14Dias.getDate(), fechaMas14Dias.getMonth() + 1, fechaMas14Dias.getFullYear());
+  //console.log('fecha_act',fecha, '\ndia_res', diaReservado);
   // Validar si la fecha reservada es válida
   if (fecha > diaReservado || diaReservado > fechaMas14Dias) {
-    return next(new AppError('Reserva realizada en un día inválido', 402));
+    return next(new AppError('Reserva realizada en un día inválido', 401));
   }
 
   // Si se sigue, quiere decir que la fecha reservada es válida
@@ -191,7 +201,7 @@ reservaSchema.pre('save', async function(next){  // Validacion si la reserva fue
 
   const fecha_act_format = new Date(1970, 0, 1, hours, minutes, seconds);
   
-  console.log(hours, minutes, seconds, ' ---- ', this.hora_final_bloque.getHours(), this.hora_final_bloque.getMinutes(), this.hora_final_bloque.getSeconds());
+  //console.log(hours, minutes, seconds, ' ---- ', this.hora_final_bloque.getHours(), this.hora_final_bloque.getMinutes(), this.hora_final_bloque.getSeconds());
 
   if (this.hora_final_bloque < fecha_act_format) {
     return next(new AppError('Reserva realizada en una hora invalida', 401));
@@ -201,8 +211,28 @@ reservaSchema.pre('save', async function(next){  // Validacion si la reserva fue
 });
 
 
-
 // falta que reserva pertenezca a la franja horaria de la cancha
+reservaSchema.pre('save', async function(next){ // se guarda el tipo de usuario para hacer las validaciones mas faciles
+
+  // cancha
+  const cancha = await Cancha.findById(this.id_cancha);
+
+
+  if(!cancha) return next(new AppError('No existe cancha con el id ingresado', 404));
+
+  const franja_array = cancha.franja_horaria.split(':');
+  //console.log(franja_array);
+  //console.log(franja_array[0].split('-')[0], franja_array[1].split('-')[1]);
+  const lim_sup = Number(franja_array[0].split('-')[0]);
+  const lim_inf = Number(franja_array[1].split('-')[1]);
+
+  const [inicio, fin] = this.bloque.split('-').map((val) => Number(val));
+  console.log(`[${inicio} - ${fin}] , franja: [${lim_sup} - ${lim_inf}]`);
+  if((fin < lim_sup) || (inicio > lim_inf)) return next(new AppError('Reserva realizada en un bloque fuera de la franja horaria de la cancha', 401));;
+  
+  next();
+
+});
 
 
 
