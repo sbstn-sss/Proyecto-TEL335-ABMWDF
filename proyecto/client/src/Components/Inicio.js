@@ -15,11 +15,7 @@ import { BrowserRouter as Router, Route, Switch, Link, Routes, useNavigate  } fr
   return (
     <div>
 
-        <header>
-        <h1 class="">Gestor canchas USM</h1>
-
-
-        </header>
+       
 
 
         <main>

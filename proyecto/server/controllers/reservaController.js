@@ -54,7 +54,6 @@ exports.getReservasByFecha = catchAsync(async (req,res,next) =>{
       reservas
     }
   });
-
 });
 
 // implementar get by semana. ( recibe de parametro el lunes de esa semana ( retorna todas las reservas de ese lunes, hasta el viernes ))
@@ -77,7 +76,6 @@ exports.getReservasBySemana = catchAsync(async (req,res,next) =>{
       reservas
     }
   });
-
 });
 
 exports.createReserva = catchAsync(async (req,res,next) => {
@@ -126,7 +124,7 @@ exports.createReserva = catchAsync(async (req,res,next) => {
 
 exports.cancelarReserva = catchAsync(async (req, res, next) => {
   const id = req.params.id;
-  await Reserva.findByIdAndUpdate({id: req.body.id}, {activa: false}); // recibe el id de la reserva y la desactiva logicamente ( no la elimina )
+  await Reserva.findByIdAndUpdate( req.body.id, {activa: false}); // recibe el id de la reserva y la desactiva logicamente ( no la elimina )
   
   res.status(204).json({
     status: 'success',

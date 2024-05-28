@@ -1,110 +1,133 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import "./css/horario.css";
 
-export default function 
+export default function Horario() {
+    const location = useLocation();
+    const nombre = location.pathname.split("/")[2];
 
+    //console.log(nombre);
 
-() {
+    const [cancha, setCancha] = useState([]);
+
+    useEffect(() => {
+        fetch(`http://127.0.0.1:8080/api/canchas/${nombre}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+          .then(response => response.json())
+          .then(data => {
+            // Actualiza el estado con los datos recibidos
+            setCancha(data.data.cancha); // Asigna todo el objeto data.data
+            //console.log(data.data);
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+      }, []);
+
+      //console.log('cancha',cancha);
+
   return (
     <div>
 
-  <header>
-    <h1 class="">Gestor canchas USM</h1>
-
-  </header>
+ 
 
   <main>
   
-    <div class="container">
+    <div className="container">
         
-      <div>
+      <div >
 
-        <h1 class="font">Cancha de Basketball</h1>
-        <h1 class="font">Campus San Joaquín</h1>
+        <h1 className="font">{cancha.nombre}</h1>
+        
+        <h1 className="font" style={{marginLeft: '50px'}}>{(cancha.campus === "SJ")?"Campus San Joaquin":"Casa Central"}</h1>
   
       <div>
 
-      <div class="caja">
-        <h1 class="font">Horario disponible Cancha</h1>
+      <div className="caja">
+        <h1 className="font">Horario disponible Cancha</h1>
         <input type="week"/>
 
         </div>
         <div>
 
-          <div class="flex">
+          <div className="flex">
 
 
 
-            <div class="flex_Block">
+            <div className="flex_Block">
                 Bloques de horario
-                <div class="Block">
+                <div className="Block">
                    1-2
                 </div>
-                <div class="Block">
+                <div className="Block">
                  2-3
                 </div>
-                <div class="Block">
+                <div className="Block">
                   3-4
                 </div>
-                <div class="Block">
+                <div className="Block">
                    4-5
                 </div>
-                <div class="Block">
+                <div className="Block">
                   5-6
                 </div>
-                <div class="Block">
+                <div className="Block">
                    6-7
                 </div>
-                <div class="Block">
+                <div className="Block">
                    7-8
                 </div>
-                <div class="Block">
+                <div className="Block">
                    8-9
                 </div>
-                <div class="Block">
+                <div className="Block">
                   9-10
                 </div>
-                <div class="Block">
+                <div className="Block">
                   10-11
                 </div>
             </div>
 
-            <div class="flex">
+            <div className="flex">
 
 
 
 
-                <div class="flex_inside">
+                <div className="flex_inside">
                     Lunes
                     <div>
-                        <button class="Green_Block"></button>
+                        <button className="Green_Block"></button>
                     </div>
                     <div>
-                        <button class="Green_Block"></button>
+                        <button className="Green_Block"></button>
                     </div>
                     <div>
-                        <button class="Green_Block"></button>
+                        <button className="Green_Block"></button>
                     </div>
                     <div>
-                        <button class="Green_Block"></button>
+                        <button className="Green_Block"></button>
                     </div>
                     <div>
-                        <button class="Green_Block"></button>
+                        <button className="Green_Block"></button>
                     </div>
                     <div>
-                        <button class="Green_Block"></button>
+                        <button className="Green_Block"></button>
                     </div>
                     <div>
-                        <button class="Green_Block"></button>
+                        <button className="Green_Block"></button>
                     </div>
                     <div>
-                        <button class="Green_Block"></button>
+                        <button className="Green_Block"></button>
                     </div>
                     <div>
-                        <button class="Green_Block"></button>
+                        <button className="Green_Block"></button>
                     </div>
                     <div>
-                        <button class="Green_Block"></button>
+                        <button className="Green_Block"></button>
                     </div>
                 </div>
 
@@ -114,39 +137,39 @@ export default function
 
 
 
-                <div class="flex_inside">
+                <div className="flex_inside">
                     Martes
 
 
                     <div>
-                        <button class="Green_Block"></button>
+                        <button className="Green_Block"></button>
                     </div>
                     <div>
-                        <button class="Green_Block"></button>
+                        <button className="Green_Block"></button>
                     </div>
                     <div>
-                        <button class="Green_Block"></button>
+                        <button className="Green_Block"></button>
                     </div>
                     <div>
-                        <button class="Green_Block"></button>
+                        <button className="Green_Block"></button>
                     </div>
                     <div>
-                        <button class="Green_Block"></button>
+                        <button className="Green_Block"></button>
                     </div>
                     <div>
-                        <button class="Green_Block"></button>
+                        <button className="Green_Block"></button>
                     </div>
                     <div>
-                        <button class="Green_Block"></button>
+                        <button className="Green_Block"></button>
                     </div>
                     <div>
-                        <button class="Green_Block"></button>
+                        <button className="Green_Block"></button>
                     </div>
                     <div>
-                        <button class="Green_Block"></button>
+                        <button className="Green_Block"></button>
                     </div>
                     <div>
-                        <button class="Green_Block"></button>
+                        <button className="Green_Block"></button>
                     </div>
                 </div>
 
@@ -156,39 +179,39 @@ export default function
 
 
 
-                <div class="flex_inside">
+                <div className="flex_inside">
                     Miercoles
 
 
                     <div>
-                        <button class="Green_Block"></button>
+                        <button className="Green_Block"></button>
                     </div>
                     <div>
-                        <button class="Green_Block"></button>
+                        <button className="Green_Block"></button>
                     </div>
                     <div>
-                        <button class="Green_Block"></button>
+                        <button className="Green_Block"></button>
                     </div>
                     <div>
-                        <button class="Green_Block"></button>
+                        <button className="Green_Block"></button>
                     </div>
                     <div>
-                        <button class="Green_Block"></button>
+                        <button className="Green_Block"></button>
                     </div>
                     <div>
-                        <button class="Green_Block"></button>
+                        <button className="Green_Block"></button>
                     </div>
                     <div>
-                        <button class="Green_Block"></button>
+                        <button className="Green_Block"></button>
                     </div>
                     <div>
-                        <button class="Green_Block"></button>
+                        <button className="Green_Block"></button>
                     </div>
                     <div>
-                        <button class="Green_Block"></button>
+                        <button className="Green_Block"></button>
                     </div>
                     <div>
-                        <button class="Green_Block"></button>
+                        <button className="Green_Block"></button>
                     </div>
                 </div>
 
@@ -196,39 +219,39 @@ export default function
 
 
 
-                <div class="flex_inside">
+                <div className="flex_inside">
                     Jueves
 
 
                     <div>
-                        <button class="Green_Block"></button>
+                        <button className="Green_Block"></button>
                     </div>
                     <div>
-                        <button class="Green_Block"></button>
+                        <button className="Green_Block"></button>
                     </div>
                     <div>
-                        <button class="Green_Block"></button>
+                        <button className="Green_Block"></button>
                     </div>
                     <div>
-                        <button class="Green_Block"></button>
+                        <button className="Green_Block"></button>
                     </div>
                     <div>
-                        <button class="Green_Block"></button>
+                        <button className="Green_Block"></button>
                     </div>
                     <div>
-                        <button class="Green_Block"></button>
+                        <button className="Green_Block"></button>
                     </div>
                     <div>
-                        <button class="Green_Block"></button>
+                        <button className="Green_Block"></button>
                     </div>
                     <div>
-                        <button class="Green_Block"></button>
+                        <button className="Green_Block"></button>
                     </div>
                     <div>
-                        <button class="Green_Block"></button>
+                        <button className="Green_Block"></button>
                     </div>
                     <div>
-                        <button class="Green_Block"></button>
+                        <button className="Green_Block"></button>
                     </div>
                 </div>
 
@@ -238,39 +261,39 @@ export default function
 
 
 
-                <div class="flex_inside">
+                <div className="flex_inside">
                     Viernes
 
 
                     <div>
-                        <button class="Green_Block"></button>
+                        <button className="Green_Block"></button>
                     </div>
                     <div>
-                        <button class="Green_Block"></button>
+                        <button className="Green_Block"></button>
                     </div>
                     <div>
-                        <button class="Green_Block"></button>
+                        <button className="Green_Block"></button>
                     </div>
                     <div>
-                        <button class="Green_Block"></button>
+                        <button className="Green_Block"></button>
                     </div>
                     <div>
-                        <button class="Green_Block"></button>
+                        <button className="Green_Block"></button>
                     </div>
                     <div>
-                        <button class="Green_Block"></button>
+                        <button className="Green_Block"></button>
                     </div>
                     <div>
-                        <button class="Green_Block"></button>
+                        <button className="Green_Block"></button>
                     </div>
                     <div>
-                        <button class="Green_Block"></button>
+                        <button className="Green_Block"></button>
                     </div>
                     <div>
-                        <button class="Green_Block"></button>
+                        <button className="Green_Block"></button>
                     </div>
                     <div>
-                        <button class="Green_Block"></button>
+                        <button className="Green_Block"></button>
                     </div>
                 </div>
             </div>
@@ -285,7 +308,7 @@ export default function
         </div>
       </div>
 
-      <button type="submit" class="minecraft_button">Reservar</button>
+      <button type="submit" className="minecraft_button">Reservar</button>
 
     </div>
   </main>

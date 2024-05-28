@@ -14,7 +14,7 @@ exports.getAllCanchas = catchAsync(async (req, res, next) => {
 
 exports.getOneCancha = catchAsync(async (req, res, next) => {
   // recibe parametro: req.params.cancha (slug)
-  const cancha = await Cancha.find({slug: req.params.cancha});
+  const cancha = await Cancha.findOne({slug: req.params.cancha});
 
   if(!cancha) return next(new AppError('La cancha ingresada no existe.', 404));
   
