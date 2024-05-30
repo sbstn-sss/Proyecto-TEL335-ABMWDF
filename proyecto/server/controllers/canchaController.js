@@ -1,5 +1,6 @@
 const Cancha = require('../models/cancha');
 const catchAsync = require('../tools/catchAsync');
+const AppError = require('../tools/appError');
 
 exports.getAllCanchas = catchAsync(async (req, res, next) => {
   const canchas = await Cancha.find();
