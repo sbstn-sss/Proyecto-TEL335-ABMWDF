@@ -19,7 +19,7 @@ export default function Horario() {
     const [selectedWeek, setSelectedWeek] = useState('');
 
     useEffect(() => {
-        fetch(`http://127.0.0.1:8080/api/canchas/${nombre}`, {
+        fetch(`http://127.0.0.1/api/canchas/${nombre}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

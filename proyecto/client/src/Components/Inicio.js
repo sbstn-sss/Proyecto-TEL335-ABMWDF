@@ -19,10 +19,10 @@ import { BrowserRouter as Router, Route, Switch, Link, Routes, useNavigate  } fr
 
 
         <main>
-        <div class="container">
-            <h1 class = "font">Bienvenidos al gestor de canchas USM</h1>
+        <div className="container">
+            <h1 className = "font">Bienvenidos al gestor de canchas USM</h1>
 
-            <button onClick={Pressed} class="button_inicio">Reserva de horarios</button>
+            <button onClick={Pressed} className="button_inicio">Reserva de horarios</button>
         </div>
         </main>
         

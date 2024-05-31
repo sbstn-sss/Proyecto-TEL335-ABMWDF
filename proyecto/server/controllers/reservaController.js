@@ -78,49 +78,50 @@ exports.getReservasBySemana = catchAsync(async (req,res,next) =>{
   });
 });
 
-exports.createReserva = catchAsync(async (req,res,next) => {
-  const filteredBody = filterObj(
-    req.body,
-    'rol',
-    'id_cancha',
-    'bloque',
-    'dia_reservado'
-  );
-  // se registra la reserva
-  const reserva = await Reserva.create(filteredBody); // al hacer create, se ejecutan las validaciones
-
-  // se busca el usuario por su rol
-  
-  const user = await Usuario.findOne({rol: filteredBody.rol});
-
-  if (!user) {
-    return next(new AppError('No existe usuario registrado con ese rol', 401));
-  }
-
-  const message = `Estimado ${user.name}\n Su reserva ha sido confirmada para el Bloque ${reserva.bloque}.\nRecuerda confirmar presencialmente antes del horario seleccionado de lo contrario se eliminara la reserva.\n Tambien, en caso de no poder asistir puedes cancelar tu reserva.\n\nSaludos!`;
-
+exports.createReserva = async (req, res, next) => {
   try {
-    //
+    const filteredBody = filterObj(
+      req.body,
+      'rol',
+      'id_cancha',
+      'bloque',
+      'dia_reservado'
+    );
 
+    // Se registra la reserva
+    const reserva = await Reserva.create(filteredBody); // Al hacer create, se ejecutan las validaciones
+
+    // Se busca el usuario por su rol
+    const user = await Usuario.findOne({ rol: filteredBody.rol });
+
+    if (!user) {
+      return next(new AppError('No existe usuario registrado con ese rol', 401));
+    }
+
+    const message = `Estimado ${user.name}\n Su reserva ha sido confirmada para el Bloque ${reserva.bloque}.\nRecuerda confirmar presencialmente antes del horario seleccionado; de lo contrario, se eliminará la reserva. También, en caso de no poder asistir, puedes cancelar tu reserva.\n\nSaludos!`;
+
+    // Envío de correo electrónico
     await sendEmail({
       email: user.email,
       subject: 'Tu reserva ha sido registrada',
-      message
+      message,
     });
 
     res.status(200).json({
       status: 'success',
-      message: 'Notificacion enviada al email.'
+      message: 'Notificación enviada al email.',
     });
   } catch (err) {
+    // Manejo explícito de errores
+    console.error('Error al crear la reserva:', err);
     return next(
       new AppError(
-        'Hubo un error mientras se enviaba el email. Intente nuevamente!',
+        'Hubo un error mientras se procesaba la reserva. Intente nuevamente.',
         500
       )
     );
   }
-});
+};
 
 exports.cancelarReserva = catchAsync(async (req, res, next) => {
   const id = req.params.id;

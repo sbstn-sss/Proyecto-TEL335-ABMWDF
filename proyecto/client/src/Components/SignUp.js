@@ -42,7 +42,7 @@ export default function SignUp() {
 
                 alert('Las contraseñas no coinciden. Vuela a intentar');
             }else{
-                alert("Inicio de Sesión Completado. Se le redirigirá a la página principal");
+                
                 fetch('http://127.0.0.1:8080/api/users/signup', {
                     method: 'POST',
                     headers: {
@@ -66,7 +66,7 @@ export default function SignUp() {
                       console.error('Error:', error);
                     });
 
-                    //navigate("/Inicio");
+                    navigate("/Acceso");
 
 
             }
