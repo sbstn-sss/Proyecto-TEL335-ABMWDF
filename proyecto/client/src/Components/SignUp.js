@@ -69,6 +69,8 @@ export default function SignUp() {
                     navigate("/Acceso");
 
 
+
+
             }
 
         }else{
