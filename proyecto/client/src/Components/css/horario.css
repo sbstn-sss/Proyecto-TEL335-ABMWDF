@@ -131,6 +131,8 @@
     border-style: solid;
     border-color: #b3b0ab;
     align-items: center;
+    width: '100px';
+    margin-top: '20px';
 
   }
 
@@ -140,6 +142,7 @@
     flex-direction: column;
     border-style: none;
     align-items: center;
+    
 
   }
 
