@@ -212,3 +212,17 @@
 
 }
 
+.Orange_Block {
+  width: 50px;
+  height: 25px;
+
+  background-color: orange;
+  cursor: pointer;
+}
+
+.Red_Block {
+  width: 50px;
+  height: 25px;
+  background-color: red;
+  cursor: pointer;
+}
