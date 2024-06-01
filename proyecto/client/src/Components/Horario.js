@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import "./css/horario.css";
 import DatePicker from "react-multi-date-picker";
-import { BrowserRouter as useNavigate  } from 'react-router-dom';
+
 
 export default function Horario() {
     const location = useLocation();
@@ -116,6 +116,7 @@ export default function Horario() {
         }
         return weekDays.map((day, index) => ({ day, date: dates[index] }));
     };
+
 
 
     const mondayDate = new Date(selectedWeek.split('-').reverse().join('-'));
