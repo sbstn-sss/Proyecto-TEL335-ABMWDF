@@ -3,9 +3,12 @@ import { useLocation } from 'react-router-dom';
 import "./css/horario.css";
 import DatePicker from "react-multi-date-picker";
 import { Cookies, CookiesProvider, useCookies } from 'react-cookie';
+import { BrowserRouter as Router, Route, Switch, Link, Routes, useNavigate  } from 'react-router-dom';
 
 
 export default function Horario() {
+
+    const navigate = useNavigate();
     const location = useLocation();
     const nombre = location.pathname.split("/")[2];
 
@@ -155,6 +158,9 @@ export default function Horario() {
             console.error('Error:', error);
             // Aquí puedes manejar errores de reserva, como mostrar un mensaje de error al usuario.
         });
+
+        alert("Reserva exitosa. Será redirigido al inicio.");
+        navigate("/");
     };
 
 
