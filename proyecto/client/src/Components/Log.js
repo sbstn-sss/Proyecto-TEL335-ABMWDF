@@ -31,44 +31,38 @@ export default function Log() {
   const Pressed = () => {
     // Aquí defines la acción que deseas ejecutar
     
-    if(password != "" && email != ""){
-    //alert("iniciando sesión");
-    fetch('http://127.0.0.1:8080/api/users/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          "email": email,
-          "password": password
-        }),
+  fetch('http://127.0.0.1:8080/api/users/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        "email": email,
+        "password": password
+      }),
+    })
+      .then(response => response.json())
+      .then(data => {
+        // Maneja los datos recibidos
+        //console.log(data.data);
+        const {id, email, name, rol, role} = data.data.user;
+        console.log(id, email, name, rol, role);
+
+        setCookie('jwt', data.token, { path: '/' , sameSite: 'none', secure: true});
+        setCookie('id_usuario', id, { path: '/' , sameSite: 'none', secure: true});
+        setCookie('email', email, { path: '/' , sameSite: 'none', secure: true});
+        setCookie('nombre', name, { path: '/' , sameSite: 'none', secure: true});
+        setCookie('rol', rol, { path: '/' , sameSite: 'none', secure: true});
+        setCookie('tipo_usuario', role, { path: '/' , sameSite: 'none', secure: true});
+        console.log(cookies);
+        navigate("/");
+
       })
-        .then(response => response.json())
-        .then(data => {
-          // Maneja los datos recibidos
-          //console.log(data.data);
-          const {id, email, name, rol, role} = data.data.user;
-          console.log(id, email, name, rol, role);
+      .catch(error => {
+        // Maneja cualquier error
+        console.error('Error:', error);
+      });
 
-          setCookie('jwt', data.token, { path: '/' , sameSite: 'none', secure: true});
-          setCookie('id_usuario', id, { path: '/' , sameSite: 'none', secure: true});
-          setCookie('email', email, { path: '/' , sameSite: 'none', secure: true});
-          setCookie('nombre', name, { path: '/' , sameSite: 'none', secure: true});
-          setCookie('rol', rol, { path: '/' , sameSite: 'none', secure: true});
-          setCookie('tipo_usuario', role, { path: '/' , sameSite: 'none', secure: true});
-          console.log(cookies);
-          navigate("/");
-
-        })
-        .catch(error => {
-          // Maneja cualquier error
-          console.error('Error:', error);
-        });
-
-    }else{
-        alert("ingresa datos válidos");
-
-    }
   };
 
 

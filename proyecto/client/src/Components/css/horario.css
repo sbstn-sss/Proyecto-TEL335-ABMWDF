@@ -141,9 +141,7 @@
     display: flex;
     flex-direction: column;
     border-style: none;
-    align-items: center;
-    
-
+    align-items: center; 
   }
 
 
