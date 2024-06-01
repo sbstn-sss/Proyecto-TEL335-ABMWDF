@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import "./css/horario.css";
 import DatePicker from "react-multi-date-picker";
 import { BrowserRouter as useNavigate  } from 'react-router-dom';
@@ -117,11 +117,6 @@ export default function Horario() {
         return weekDays.map((day, index) => ({ day, date: dates[index] }));
     };
 
-    const navigate = useNavigate();
-    const reserve = ()=>{
-
-        navigate("/Reserva");
-    };
 
     const mondayDate = new Date(selectedWeek.split('-').reverse().join('-'));
     const weekDays = getWeekDays(mondayDate);
@@ -135,9 +130,8 @@ export default function Horario() {
                         <h1 className="font" style={{ marginLeft: '50px' }}>
                             {cancha.campus === "SJ" ? "Campus San Joaquin" : "Casa Central"}
                         </h1>
-                        
+                        <h1>Reservas</h1>
                         <div className="caja">
-                            <h1 className="font">TEST</h1>
                             <DatePicker
                                 value={calendarWeek}
                                 onChange={handleDateChangeTest}
@@ -152,14 +146,6 @@ export default function Horario() {
                                     return props;
                                 }}
                             />
-                            <h1>Lista de Reservas</h1>
-                            <ul>
-                                {reservas.map((reserva) => (
-                                <li key={reserva.id}>
-                                    {reserva.dia_reservado} - {reserva.bloque}
-                                </li>
-                                ))}
-                            </ul>
                         </div>
 
                         <div className="flex" style={{ columnGap: '10px' }}>
@@ -175,7 +161,7 @@ export default function Horario() {
                             ))}
                         </div>
                     </div>
-                    <button type="submit" className="minecraft_button" onClick={reserve}>Reservar</button>
+                    <button type="submit" className="minecraft_button">Reservar</button>
                 </div>
             </main>
         </div>
