@@ -1,32 +1,32 @@
 /* Estilos Base */
-
+/*
 
 @font-face {
     font-family: 'halflife2';
-   /* src: url('../fonts/halflife2.ttf');*/
+    src: url('../fonts/halflife2.ttf');
     font-size: normal;
     font-weight: normal;
   }
   
   @font-face {
     font-family: 'StretchPro';
-    /*src: url('../fonts/StretchPro.otf');*/
+    src: url('../fonts/StretchPro.otf');
     font-size: normal;
     font-weight: normal;
-  }
+  }*/
   
   @font-face {
     font-family: 'Minecraft';
-    /*src: url('../fonts/Minecraft.ttf');*/
+    src: url('Minecraft.ttf');
     font-size: smaller;
     font-weight: normal;
   }
-  
+  /*
   @font-face {
     font-family: 'urban-jungle-demo';
-    /*src: url('../fonts/urban-jungle-demo.ttf');*/
+    src: url('../fonts/urban-jungle-demo.ttf');
     font-weight: bolder;
-  }
+  }*/
   
   * {
     margin: 0;
