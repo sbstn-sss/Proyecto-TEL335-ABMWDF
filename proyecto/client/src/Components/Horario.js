@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import "./css/horario.css";
 import DatePicker from "react-multi-date-picker";
-import { BrowserRouter as useNavigate  } from 'react-router-dom';
+
 
 export default function Horario() {
     const location = useLocation();
@@ -117,11 +117,7 @@ export default function Horario() {
         return weekDays.map((day, index) => ({ day, date: dates[index] }));
     };
 
-    const navigate = useNavigate();
-    const reserve = ()=>{
 
-        navigate("/Reserva");
-    };
 
     const mondayDate = new Date(selectedWeek.split('-').reverse().join('-'));
     const weekDays = getWeekDays(mondayDate);
@@ -175,7 +171,7 @@ export default function Horario() {
                             ))}
                         </div>
                     </div>
-                    <button type="submit" className="minecraft_button" onClick={reserve}>Reservar</button>
+                    <button type="submit" className="minecraft_button">Reservar</button>
                 </div>
             </main>
         </div>
