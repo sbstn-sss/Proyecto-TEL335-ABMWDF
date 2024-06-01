@@ -5,7 +5,7 @@ COPY . /home/app
 WORKDIR /home/app
 
 # Instala nodemon como una dependencia de desarrollo
-RUN npm install nodemon --save-dev
+RUN npm i
 
 EXPOSE 8080
 

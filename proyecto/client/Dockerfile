@@ -6,7 +6,7 @@ COPY . /home/app
 
 WORKDIR /home/app
 
-RUN npm install nodemon --save-dev
+RUN npm i
 
 EXPOSE 3000
 

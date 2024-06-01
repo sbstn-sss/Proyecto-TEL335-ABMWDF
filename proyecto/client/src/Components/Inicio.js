@@ -15,9 +15,6 @@ import { BrowserRouter as Router, Route, Switch, Link, Routes, useNavigate  } fr
   return (
     <div>
 
-       
-
-
         <main>
         <div className="container">
             <h1 className = "font">Bienvenidos al gestor de canchas USM</h1>
