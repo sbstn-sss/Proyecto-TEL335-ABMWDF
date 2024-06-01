@@ -1,8 +1,21 @@
 // Header.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 function Header({ cookies }) {
+
+  const Delete_Cookies = () => {
+    // Aquí defines la acción que deseas ejecutar
+    Cookies.remove('jwt');
+    Cookies.remove('id_usuario');
+    Cookies.remove('email');
+    Cookies.remove('nombre');
+    Cookies.remove('rol');
+    Cookies.remove('tipo_usuario');
+  };
+
+
   return (
     <header>
       <nav>
@@ -24,7 +37,7 @@ function Header({ cookies }) {
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', rowGap: '10px' }}>
                 <button style={{ height: '20px', width: '100px', color: '#171717', backgroundColor: '#f7ae00', borderStyle: 'solid', borderWidth: '2px', borderColor: '#f7ae00' }}>Mis Reservas</button>
-                <button style={{ height: '20px', color: '#171717', backgroundColor: '#D60019', borderStyle: 'solid', borderStyle: 'none' }}>Log Out</button>
+                <button style={{ height: '20px', color: '#171717', backgroundColor: '#D60019', borderStyle: 'solid', borderStyle: 'none' }} onClick={Delete_Cookies}>Log Out</button>
               </div>
             </div>
           ) : null}
