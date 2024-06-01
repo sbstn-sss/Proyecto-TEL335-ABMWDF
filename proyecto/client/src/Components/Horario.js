@@ -10,6 +10,8 @@ export default function Horario() {
 
     const [cancha, setCancha] = useState({});
     const [selectedButton, setSelectedButton] = useState({ day: '', index: -1 });
+    const [selectedTime, setSelectedTime] = useState('');
+    const [selectedDay, setSelectedDay] = useState('');
     const [reservas, setReservas] = useState([]);
     const [selectedWeek, setSelectedWeek] = useState('');
     const [calendarWeek, setCalendarWeek] = useState([]);
@@ -69,6 +71,8 @@ export default function Horario() {
 
     const handleButtonClick = (day, index) => {
         setSelectedButton({ day, index });
+        setSelectedDay(day);
+        setSelectedTime(`${index * 2 + 1}-${index * 2 + 2}`);
     };
 
     const isReserved = (day, index) => {
@@ -161,6 +165,11 @@ export default function Horario() {
                                 </div>
                             ))}
                         </div>
+                    </div>
+                    <div>
+                        {selectedTime && selectedDay && (
+                            <p>Horario seleccionado: {selectedDay} - {selectedTime}</p>
+                        )}
                     </div>
                     <button type="submit" className="minecraft_button">Reservar</button>
                 </div>
