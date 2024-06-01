@@ -7,40 +7,42 @@ export default function Horario() {
     const location = useLocation();
     const nombre = location.pathname.split("/")[2];
 
-    const [cancha, setCancha] = useState([]);
+    const [cancha, setCancha] = useState({});
     const [selectedButton, setSelectedButton] = useState({ day: '', index: -1 });
     const [reservas, setReservas] = useState([]);
     const [selectedWeek, setSelectedWeek] = useState('');
-    const [calendarWeek] = useState([]);
+    const [calendarWeek, setCalendarWeek] = useState([]);
 
     useEffect(() => {
-
-        // Obtener la fecha del lunes de la semana actual
         const today = new Date();
         const diffToMonday = (today.getDay() === 0) ? 6 : today.getDay() - 1;
         const mondayDate = new Date(today);
         mondayDate.setDate(today.getDate() - diffToMonday);
-
         setSelectedWeek(formatDate(mondayDate));
 
         fetch(`http://127.0.0.1:8080/api/canchas/${nombre}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
         })
-          .then(response => response.json())
-          .then(data => {
+        .then(response => response.json())
+        .then(data => {
             setCancha(data.data.cancha);
-          })
-          .catch(error => {
+        })
+        .catch(error => {
             console.error('Error:', error);
-          });
+        });
     }, [nombre]);
+
+    useEffect(() => {
+        if (selectedWeek) {
+            fetchReservasForWeek();
+        }
+    }, [selectedWeek]);
 
     const fetchReservasForWeek = () => {
         const url = `http://127.0.0.1:8080/api/reservas/${nombre}/semana/${selectedWeek}`;
-        console.log(url);
         fetch(url, {
             method: 'GET',
             headers: {
@@ -49,19 +51,12 @@ export default function Horario() {
         })
         .then(response => response.json())
         .then(data => {
-            console.log(data.data.reservas);
             setReservas(data.data.reservas);
         })
         .catch(error => {
             console.error('Error:', error);
         });
     };
-
-    useEffect(() => {
-        if (selectedWeek) {
-            fetchReservasForWeek();
-        }
-    }, [selectedWeek]);
 
     const formatDate = (date) => {
         const d = new Date(date);
@@ -98,20 +93,31 @@ export default function Horario() {
         ));
     };
 
-
     const handleDateChangeTest = (dates) => {
-        if (dates && dates.length === 2) {
+        if (dates && dates.length > 0) {
             const startDate = new Date(dates[0]);
             const startDay = startDate.getDay();
-            const diffToMonday = (startDay === 0) ? 1 : (startDay === 1) ? 0 : (8 - startDay);
+            const diffToMonday = startDay === 0 ? 1 : (1 - startDay);
             const mondayDate = new Date(startDate);
-            mondayDate.setDate(startDate.getDate() + diffToMonday);
+            mondayDate.setDate(startDate.getDate() + diffToMonday);  
 
-            console.log(formatDate(mondayDate));
-
-            setSelectedWeek(formatDate(mondayDate));  // Actualiza el lunes de la semana seleccionada
+            setSelectedWeek(formatDate(mondayDate));  
         }
     };
+
+    const getWeekDays = (mondayDate) => {
+        const weekDays = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
+        const dates = [];
+        for (let i = 1; i < 6; i++) {
+            const day = new Date(mondayDate);
+            day.setDate(mondayDate.getDate() + i);
+            dates.push(formatDate(day));
+        }
+        return weekDays.map((day, index) => ({ day, date: dates[index] }));
+    };
+
+    const mondayDate = new Date(selectedWeek.split('-').reverse().join('-'));
+    const weekDays = getWeekDays(mondayDate);
 
     return (
         <div>
@@ -149,31 +155,17 @@ export default function Horario() {
                             </ul>
                         </div>
 
-                        <div className="flex" style={{columnGap: '10px'}}>
+                        <div className="flex" style={{ columnGap: '10px' }}>
                             <div className="flex_Block">
                                 Bloques de horario
                                 {renderTimeBlocks()}
                             </div>
-                            <div className="flex_inside" style={{width: '100px'}} >
-                                Lunes
-                                {renderButtons('Lunes')}
-                            </div>
-                            <div className="flex_inside" style={{width: '100px'}} >
-                                Martes
-                                {renderButtons('Martes')}
-                            </div>
-                            <div className="flex_inside" style={{width: '100px'}} >
-                                Miércoles
-                                {renderButtons('Miércoles')}
-                            </div>
-                            <div className="flex_inside" style={{width: '100px'}} >
-                                Jueves
-                                {renderButtons('Jueves')}
-                            </div>
-                            <div className="flex_inside" style={{width: '100px'}} >
-                                Viernes
-                                {renderButtons('Viernes')}
-                            </div>
+                            {weekDays.map(({ day, date }) => (
+                                <div className="flex_inside" style={{ width: '100px' }} key={day}>
+                                    {day}
+                                    {renderButtons(date)}
+                                </div>
+                            ))}
                         </div>
                     </div>
                     <button type="submit" className="minecraft_button">Reservar</button>
