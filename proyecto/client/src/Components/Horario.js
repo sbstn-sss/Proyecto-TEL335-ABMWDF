@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import "./css/horario.css";
 import DatePicker from "react-multi-date-picker";
+import { Cookies, CookiesProvider, useCookies } from 'react-cookie';
 
 
 export default function Horario() {
@@ -15,6 +16,8 @@ export default function Horario() {
     const [reservas, setReservas] = useState([]);
     const [selectedWeek, setSelectedWeek] = useState('');
     const [calendarWeek, setCalendarWeek] = useState([]);
+    const [cookies] = useCookies(['jwt', 'id_usuario', 'email', 'nombre', 'rol', 'tipo_usuario']);
+    //console.log(cookies);
 
     useEffect(() => {
         const today = new Date();
@@ -94,7 +97,7 @@ export default function Horario() {
 
     const renderTimeBlocks = () => {
         return Array.from({ length: 10 }, (_, i) => (
-            <div className="Block" key={i}>{i * 2 + 1}-{i * 2 + 2}</div>
+            <div className="Block" key={i}> <p style={{fontSize:'medium'}}> {i * 2 + 1}-{i * 2 + 2}</p></div>
         ));
     };
 
@@ -119,6 +122,39 @@ export default function Horario() {
             dates.push(formatDate(day));
         }
         return weekDays.map((day, index) => ({ day, date: dates[index] }));
+    };
+
+    const reservar = () => {
+        if (!selectedTime || !selectedDay) {
+            console.error("Seleccione un horario antes de reservar.");
+            return;
+        }
+    
+        const reservaData = {
+            rol: cookies.rol,
+            id_cancha: cancha.id, // Asumiendo que el ID de la cancha está en cancha._id
+            bloque: selectedTime,
+            dia_reservado: selectedDay
+        };
+    
+        fetch('http://127.0.0.1:8080/api/reservas', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(reservaData),
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error al reservar.');
+            }
+            // Aquí puedes realizar cualquier acción adicional después de una reserva exitosa, como mostrar un mensaje de éxito.
+            console.log('Reserva exitosa');
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            // Aquí puedes manejar errores de reserva, como mostrar un mensaje de error al usuario.
+        });
     };
 
 
@@ -155,7 +191,7 @@ export default function Horario() {
 
                         <div className="flex" style={{ columnGap: '10px' }}>
                             <div className="flex_Block">
-                                Bloques de horario
+                                <p style={{ marginLeft:'20px' }}> Bloques de horario </p>
                                 {renderTimeBlocks()}
                             </div>
                             {weekDays.map(({ day, date }) => (
@@ -168,10 +204,10 @@ export default function Horario() {
                     </div>
                     <div>
                         {selectedTime && selectedDay && (
-                            <p>Horario seleccionado: {selectedDay} - {selectedTime}</p>
+                            <p>Horario seleccionado: {selectedDay} - Bloque: {selectedTime}</p>
                         )}
                     </div>
-                    <button type="submit" className="minecraft_button">Reservar</button>
+                    <button type="button" className="minecraft_button" onClick={reservar}>Reservar</button>
                 </div>
             </main>
         </div>
