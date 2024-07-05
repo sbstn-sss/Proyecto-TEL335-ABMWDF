@@ -128,6 +128,11 @@ export default function Horario() {
     };
 
     const reservar = () => {
+        if (!cookies.jwt) {
+            alert("Necesita logearse para hacer una reserva.");
+            return;
+        }
+        
         if (!selectedTime || !selectedDay) {
             console.error("Seleccione un horario antes de reservar.");
             return;
