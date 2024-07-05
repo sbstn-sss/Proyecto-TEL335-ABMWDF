@@ -1,9 +1,11 @@
 // Header.jsx
 import React from 'react';
-import { Link } from 'react-router-dom';
 import Cookies from 'js-cookie';
+import { BrowserRouter as Router, Route, Switch, Link, Routes, useNavigate  } from 'react-router-dom';
 
 function Header({ cookies }) {
+
+  const navigate = useNavigate();
 
   const Delete_Cookies = () => {
     // Aquí defines la acción que deseas ejecutar
@@ -14,6 +16,16 @@ function Header({ cookies }) {
     Cookies.remove('rol');
     Cookies.remove('tipo_usuario');
   };
+
+
+
+  const Reservas = () => {
+
+    navigate(`/Reserva`);
+   
+
+  };
+
 
 
   return (
@@ -36,7 +48,7 @@ function Header({ cookies }) {
                 <p style={{ color: '#f7ae00' }}>{cookies.tipo_usuario}</p>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', rowGap: '10px' }}>
-                <button style={{ height: '20px', width: '100px', color: '#171717', backgroundColor: '#f7ae00', borderStyle: 'solid', borderWidth: '2px', borderColor: '#f7ae00' }}>Mis Reservas</button>
+                <button style={{ height: '20px', width: '100px', color: '#171717', backgroundColor: '#f7ae00', borderStyle: 'solid', borderWidth: '2px', borderColor: '#f7ae00' }} onClick={Reservas}>Mis Reservas</button>
                 <button style={{ height: '20px', color: '#171717', backgroundColor: '#D60019', borderStyle: 'solid', borderStyle: 'none' }} onClick={Delete_Cookies}>Log Out</button>
               </div>
             </div>
