@@ -153,19 +153,21 @@ export default function Horario() {
             body: JSON.stringify(reservaData),
         })
         .then(response => {
-            if (!response.ok) {
+            /*if (!response.ok) {
                 throw new Error('Error al reservar.');
-            }
+            }*/
             // Aquí puedes realizar cualquier acción adicional después de una reserva exitosa, como mostrar un mensaje de éxito.
             console.log('Reserva exitosa');
+            alert("Reserva exitosa. Será redirigido al inicio.");
+            navigate("/");
         })
         .catch(error => {
             console.error('Error:', error);
             // Aquí puedes manejar errores de reserva, como mostrar un mensaje de error al usuario.
+            alert("alo")
+            return;
         });
 
-        alert("Reserva exitosa. Será redirigido al inicio.");
-        navigate("/");
     };
 
 
