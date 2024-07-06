@@ -78,27 +78,97 @@ exports.getReservasBySemana = catchAsync(async (req,res,next) =>{
   });
 });
 
-exports.createReserva = async (req, res, next) => {
-  try {
-    const filteredBody = filterObj(
-      req.body,
-      'rol',
-      'id_cancha',
-      'bloque',
-      'dia_reservado'
-    );
+const getDayName = (date) => {
+  const days = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
+  return days[date.getDay()];
+};
 
-    // Se registra la reserva
-    const reserva = await Reserva.create(filteredBody); // Al hacer create, se ejecutan las validaciones
+const formatDate = (date) => {
+  const day = date.getDate().toString().padStart(2, '0');
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const year = date.getFullYear();
+  return `${day}-${month}-${year}`;
+};
 
-    // Se busca el usuario por su rol
-    const user = await Usuario.findOne({ rol: filteredBody.rol });
+exports.createReserva = catchAsync(async (req, res, next) => {
+  const filteredBody = filterObj(
+    req.body,
+    'rol',
+    'id_cancha',
+    'bloque',
+    'dia_reservado',
+    'num_semanas'
+  );
 
-    if (!user) {
-      return next(new AppError('No existe usuario registrado con ese rol', 401));
+  // Se busca el usuario por su rol
+  const user = await Usuario.findOne({ rol: filteredBody.rol });
+
+  if (!user) {
+    return next(new AppError('No existe usuario registrado con ese rol', 401));
+  }
+
+  if (user.role === 'profesor') {
+    const { dia_reservado, num_semanas } = filteredBody;
+
+    // Convertir la fecha de entrada a un objeto Date
+    const [day, month, year] = dia_reservado.split('-');
+    const fechaInicial = new Date(year, month - 1, day); // Crear el objeto Date correctamente
+
+    console.log(fechaInicial);
+    const reservas = [];
+
+    for (let i = 0; i < num_semanas; i++) {
+      // Crear una nueva fecha para cada semana
+      let fechaReserva = new Date(fechaInicial);
+      fechaReserva.setDate(fechaInicial.getDate() + 1 + (i * 7)); // Incrementar la fecha en 7 días para cada semana
+
+      // Formatear la fecha en formato dd-MM-YYYY
+      const dia_fecha = fechaReserva.getDate().toString().padStart(2, '0');
+      const mes_fecha = (fechaReserva.getMonth() + 1).toString().padStart(2, '0');
+      const year_fecha = fechaReserva.getFullYear();
+      const fechaFormateada = [dia_fecha, mes_fecha, year_fecha].join('-');
+
+      // Crear una reserva para esta fecha
+      const reserva = await Reserva.create({
+        rol: filteredBody.rol,
+        id_cancha: filteredBody.id_cancha,
+        bloque: filteredBody.bloque,
+        dia_reservado: fechaFormateada
+      });
+
+      reservas.push(reserva);
     }
 
-    const message = `Estimado ${user.name}\n Su reserva ha sido confirmada para el Bloque ${reserva.bloque}.\nRecuerda confirmar presencialmente antes del horario seleccionado; de lo contrario, se eliminará la reserva. También, en caso de no poder asistir, puedes cancelar tu reserva.\n\nSaludos!`;
+    // Calcular la fecha final sumando (num_semanas - 1) * 7 días a la fecha inicial
+    const fechaFinal = new Date(fechaInicial.getTime());
+    fechaFinal.setDate(fechaFinal.getDate() + ((num_semanas - 1) * 7));
+
+    // Obtener el nombre del día de la semana de la primera reserva
+    const diaSemana = getDayName(fechaInicial);
+    const fechaFinalFormateada = formatDate(fechaFinal);
+
+    const message = `Estimado Profesor ${user.name}\n\nEl Bloque ${filteredBody.bloque} del día ${diaSemana}, ha sido registrado durante ${num_semanas} semanas (desde el ${dia_reservado} hasta ${fechaFinalFormateada}).\n\n\nSaludos!`;
+
+    // Envío de correo electrónico
+    await sendEmail({
+      email: user.email,
+      subject: 'Tus reservas han sido registradas',
+      message,
+    });
+
+    res.status(200).json({
+      status: 'success',
+      message: 'Notificación enviada al email.',
+      data: {
+        reservas
+      }
+    });
+
+  } else {
+    // Se registra la reserva para un usuario normal
+    const reserva = await Reserva.create(filteredBody); // Al hacer create, se ejecutan las validaciones
+
+    const message = `Estimado ${user.name}\n\nSu reserva ha sido confirmada para el Bloque ${reserva.bloque}.\nRecuerda confirmar presencialmente antes del horario seleccionado; de lo contrario, se eliminará la reserva. También, en caso de no poder asistir, puedes cancelar tu reserva.\n\nSaludos!`;
 
     // Envío de correo electrónico
     await sendEmail({
@@ -110,25 +180,34 @@ exports.createReserva = async (req, res, next) => {
     res.status(200).json({
       status: 'success',
       message: 'Notificación enviada al email.',
+      data: {
+        reserva
+      }
     });
-  } catch (err) {
-    // Manejo explícito de errores
-    console.error('Error al crear la reserva:', err);
-    return next(
-      new AppError(
-        'Hubo un error mientras se procesaba la reserva. Intente nuevamente.',
-        500
-      )
-    );
   }
-};
+});
 
-exports.cancelarReserva = catchAsync(async (req, res, next) => {
+/// metodo solo para el admin
+exports.confirmarReserva = catchAsync(async (req, res, next) => {
   const id = req.params.id;
-  await Reserva.findByIdAndUpdate( req.body.id, {activa: false}); // recibe el id de la reserva y la desactiva logicamente ( no la elimina )
+  await Reserva.findByIdAndUpdate( id, {estado: "confirmada"}); //
   
   res.status(204).json({
     status: 'success',
     data: null
   });
 });
+
+
+
+
+exports.cancelarReserva = catchAsync(async (req, res, next) => {
+  const id = req.params.id;
+  await Reserva.findByIdAndUpdate( id, {activa: false}); // recibe el id de la reserva y la desactiva logicamente ( no la elimina )
+  
+  res.status(204).json({
+    status: 'success',
+    data: null
+  });
+});
+

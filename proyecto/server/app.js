@@ -17,17 +17,26 @@ const app = express();
 
 
 // middleware
+app.use(cookieParser());
+
 app.use(morgan("dev"));
-app.use(cors({origin: true, credentials: true}));
+app.use(cors({origin: "http://localhost:3000/", credentials: true}));
 
 // Body parser, reading data from body into req.body
 app.use(express.json({ limit: '10kb' })); // limit of memory of the request body
-app.use(cookieParser());
+
 
 // Data sanitization against NoSQL query injection
 app.use(mongoSanitize());
 
 // routes
+
+app.use((req,res,next) => {
+  console.log(req.cookies);
+
+  next();
+});
+
 
 // usuarios
 app.use('/api/users/', userRouter);

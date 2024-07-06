@@ -1,6 +1,7 @@
 const express = require('express');
 
-const { createReserva, getReservasByFecha, cancelarReserva, getReservasBySemana } = require('../controllers/reservaController');
+const { createReserva, getReservasByFecha, cancelarReserva, getReservasBySemana, confirmarReserva } = require('../controllers/reservaController');
+const { restrictTo } = require('../controllers/authenticationController');
 
 const router = express.Router();
 
@@ -10,6 +11,10 @@ router.post('/', createReserva); // pendiente que el usuario este autenticado (p
 router.get('/:cancha/:fecha', getReservasByFecha);
 router.get('/:cancha/semana/:lunes',getReservasBySemana);
 router.delete('/:id', cancelarReserva);
+
+
+
+router.patch('/:id', restrictTo(['admin']), confirmarReserva);
 
 
 module.exports = router;

@@ -70,6 +70,13 @@ reservaSchema.pre('save', async function(next){ // se guarda el tipo de usuario 
 
   if(!user) return next(new AppError('No existe usuario con el rol ingresado', 404));
 
+  // reserva activa unica para el usuario
+  const reservas = await (Reserva.find({rol: this.rol, activa: true}));
+  console.log(reservas);
+  if(reservas.length >= 1 && user.role === "alumno")  return next(new AppError('Usted ya tiene una reserva activa.', 401));
+
+  
+
 
   this.tipo_usuario = user.role;
 
@@ -194,6 +201,8 @@ reservaSchema.pre('save', async function(next){  // Validacion si la reserva fue
   [dia,mes,year] = this.dia_reservado.split('-');
 
   if(this.fecha.getDate() != dia) return next();
+
+  console.log("dia de hoy");
   
   const hours = this.fecha.getHours();
   const minutes = this.fecha.getMinutes();
@@ -233,6 +242,15 @@ reservaSchema.pre('save', async function(next){ // se guarda el tipo de usuario 
   next();
 
 });
+
+reservaSchema.pre('save', async function(next){ // se guarda el tipo de usuario para hacer las validaciones mas faciles
+  if(this.tipo_usuario != 'profesor') return next();
+  
+  this.estado = 'confirmada';
+  
+  next();
+});
+
 
 
 
