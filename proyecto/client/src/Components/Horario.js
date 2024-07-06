@@ -20,7 +20,7 @@ export default function Horario() {
     const [selectedWeek, setSelectedWeek] = useState('');
     const [calendarWeek, setCalendarWeek] = useState([]);
     const [cookies] = useCookies(['jwt', 'id_usuario', 'email', 'nombre', 'rol', 'tipo_usuario']);
-    //console.log(cookies);
+
 
     useEffect(() => {
         const today = new Date();
@@ -31,6 +31,7 @@ export default function Horario() {
 
         fetch(`http://127.0.0.1:8080/api/canchas/${nombre}`, {
             method: 'GET',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -54,8 +55,10 @@ export default function Horario() {
         const url = `http://127.0.0.1:8080/api/reservas/${nombre}/semana/${selectedWeek}`;
         fetch(url, {
             method: 'GET',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
+               
             },
         })
         .then(response => response.json())
@@ -147,8 +150,10 @@ export default function Horario() {
     
         fetch('http://127.0.0.1:8080/api/reservas', {
             method: 'POST',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${cookies.jwt}`
             },
             body: JSON.stringify(reservaData),
         })
@@ -169,7 +174,6 @@ export default function Horario() {
         });
 
     };
-
 
 
     const mondayDate = new Date(selectedWeek.split('-').reverse().join('-'));

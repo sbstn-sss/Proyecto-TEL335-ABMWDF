@@ -1,20 +1,32 @@
-// Header.jsx
 import React from 'react';
 import Cookies from 'js-cookie';
 import { BrowserRouter as Router, Route, Switch, Link, Routes, useNavigate  } from 'react-router-dom';
 
-function Header({ cookies }) {
+function Header() {
+  const [cookies, setCookie, removeCookie] = useCookies(['jwt', 'id_usuario', 'email', 'nombre', 'rol', 'tipo_usuario']);
 
   const navigate = useNavigate();
 
   const Delete_Cookies = () => {
     // Aquí defines la acción que deseas ejecutar
-    Cookies.remove('jwt');
-    Cookies.remove('id_usuario');
-    Cookies.remove('email');
-    Cookies.remove('nombre');
-    Cookies.remove('rol');
-    Cookies.remove('tipo_usuario');
+    removeCookie('jwt', { path: '/' });
+    removeCookie('id_usuario', { path: '/' });
+    removeCookie('email', { path: '/' });
+    removeCookie('nombre', { path: '/' });
+    removeCookie('rol', { path: '/' });
+    removeCookie('tipo_usuario', { path: '/' });
+  
+    fetch('http://127.0.0.1:8080/api/users/logout', {
+      method: 'DELETE',
+      credentials: 'include'
+    }).then(response => {
+      if (response.ok) {
+        console.log('Logout successful');
+      } else {
+        console.error('Logout failed');
+      }
+    });
+  
   };
 
 
