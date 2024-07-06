@@ -76,6 +76,22 @@ exports.getReservasByUsuario = catchAsync(async (req,res,next) =>{
   });
 });
 
+exports.getMyReservas = catchAsync(async (req,res,next) =>{
+  const user = req.user;
+
+  const reservas = await Reserva.find({
+    rol: user.rol
+  });
+
+  // no hay error si no se encuentran reservas, quiere decir que esa semana esta disponible del todo
+  res.status(200).json({
+    status: 'success',
+    data: {
+      reservas
+    }
+  });
+});
+
 
 
 // implementar get by semana. ( recibe de parametro el lunes de esa semana ( retorna todas las reservas de ese lunes, hasta el viernes ))
