@@ -96,13 +96,6 @@ export default function SignUp() {
         <h2>Formulario de registro</h2>
         <form action="#">
 
-            <div class="caja">
-                <div class="caja">
-
-                    <button type="submit" class="minecraft_button">Ingresar Foto</button>
-        
-                </div>
-            </div>
             <div class="input-box">
                 <span class="icon"><ion-icon name="mail-sharp"></ion-icon></span>
                 <input type="text" value={name} onChange={handleName} required/>
