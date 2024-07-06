@@ -39,7 +39,7 @@ exports.getReservasByFecha = catchAsync(async (req,res,next) =>{
 
   if(!cancha) return next(new AppError('La cancha ingresada no existe.', 404));
 
-  console.log(cancha);
+  //console.log(cancha);
 
   // recibe fecha en formato dd-MM-YY
   const reservas = await Reserva.find({
@@ -65,7 +65,7 @@ exports.getReservasBySemana = catchAsync(async (req,res,next) =>{
   //console.log(cancha);
 
   const fechas = getDiasSemana(req.params.lunes);
-  console.log(fechas);
+  //console.log(fechas);
   // recibe fecha en formato dd-MM-YY
   const reservas = await Reserva.find({id_cancha: cancha._id, dia_reservado: {$in: fechas}});
 

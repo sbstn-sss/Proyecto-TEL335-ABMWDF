@@ -1,21 +1,31 @@
-// Header.jsx
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Cookies from 'js-cookie';
+import { useCookies } from 'react-cookie'; // 
 
-function Header({ cookies }) {
+function Header() {
+  const [cookies, setCookie, removeCookie] = useCookies(['jwt', 'id_usuario', 'email', 'nombre', 'rol', 'tipo_usuario']);
 
-  const Delete_Cookies = () => {
+  const deleteCookies = () => {
     // Aquí defines la acción que deseas ejecutar
-    Cookies.remove('jwt');
-    Cookies.remove('id_usuario');
-    Cookies.remove('email');
-    Cookies.remove('nombre');
-    Cookies.remove('rol');
-    Cookies.remove('tipo_usuario');
+    removeCookie('jwt', { path: '/' });
+    removeCookie('id_usuario', { path: '/' });
+    removeCookie('email', { path: '/' });
+    removeCookie('nombre', { path: '/' });
+    removeCookie('rol', { path: '/' });
+    removeCookie('tipo_usuario', { path: '/' });
+  
+    fetch('http://127.0.0.1:8080/api/users/logout', {
+      method: 'DELETE',
+      credentials: 'include'
+    }).then(response => {
+      if (response.ok) {
+        console.log('Logout successful');
+      } else {
+        console.error('Logout failed');
+      }
+    });
+  
   };
-
-
   return (
     <header>
       <nav>
@@ -37,7 +47,7 @@ function Header({ cookies }) {
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', rowGap: '10px' }}>
                 <button style={{ height: '20px', width: '100px', color: '#171717', backgroundColor: '#f7ae00', borderStyle: 'solid', borderWidth: '2px', borderColor: '#f7ae00' }}>Mis Reservas</button>
-                <button style={{ height: '20px', color: '#171717', backgroundColor: '#D60019', borderStyle: 'solid', borderStyle: 'none' }} onClick={Delete_Cookies}>Log Out</button>
+                <button style={{ height: '20px', color: '#171717', backgroundColor: '#D60019', borderStyle: 'solid', borderStyle: 'none' }} onClick={deleteCookies}>Log Out</button>
               </div>
             </div>
           ) : null}

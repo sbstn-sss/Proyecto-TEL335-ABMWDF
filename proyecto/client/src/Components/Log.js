@@ -29,12 +29,14 @@ export default function Log() {
 
 
   const Pressed = (event) => {
-    event.preventDefault(); // Prevents the default form submission
+    event.preventDefault();
     
     fetch('http://127.0.0.1:8080/api/users/login', {
         method: 'POST',
+        credentials: 'include',  // Incluir cookies en la solicitud
+
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           "email": email,

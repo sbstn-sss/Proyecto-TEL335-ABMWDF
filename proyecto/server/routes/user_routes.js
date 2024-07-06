@@ -8,12 +8,10 @@ const router = express.Router();
 
 router.post('/signup', signup);
 router.post('/login', login);
-router.get('/protected-route', protect, (req, res, next) => {
-  console.log('esta autenticado');
-  res.status(200).json( {
-    message: 'Congrats, you have access!'
-  });
 
+router.delete('/logout', (req, res, next) => {
+  res.clearCookie('jwt', { path: '/' });
+  res.sendStatus(204); 
 });
 
 /*

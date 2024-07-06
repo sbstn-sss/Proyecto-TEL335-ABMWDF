@@ -20,7 +20,7 @@ const app = express();
 app.use(cookieParser());
 
 app.use(morgan("dev"));
-app.use(cors({origin: "http://localhost:3000/", credentials: true}));
+app.use(cors({origin: "http://localhost:3000", credentials: true}));
 
 // Body parser, reading data from body into req.body
 app.use(express.json({ limit: '10kb' })); // limit of memory of the request body
@@ -31,11 +31,10 @@ app.use(mongoSanitize());
 
 // routes
 
-app.use((req,res,next) => {
-  console.log(req.cookies);
-
-  next();
-});
+//app.use((req,res,next) => {
+//  console.log(req.cookies);
+//  next();
+//});
 
 
 // usuarios

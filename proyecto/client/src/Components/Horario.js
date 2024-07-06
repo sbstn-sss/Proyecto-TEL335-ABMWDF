@@ -20,7 +20,7 @@ export default function Horario() {
     const [selectedWeek, setSelectedWeek] = useState('');
     const [calendarWeek, setCalendarWeek] = useState([]);
     const [cookies] = useCookies(['jwt', 'id_usuario', 'email', 'nombre', 'rol', 'tipo_usuario']);
-    //console.log(cookies);
+
 
     useEffect(() => {
         const today = new Date();
@@ -31,6 +31,7 @@ export default function Horario() {
 
         fetch(`http://127.0.0.1:8080/api/canchas/${nombre}`, {
             method: 'GET',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -54,8 +55,10 @@ export default function Horario() {
         const url = `http://127.0.0.1:8080/api/reservas/${nombre}/semana/${selectedWeek}`;
         fetch(url, {
             method: 'GET',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
+               
             },
         })
         .then(response => response.json())
@@ -128,6 +131,8 @@ export default function Horario() {
     };
 
     const reservar = () => {
+        
+        
         if (!selectedTime || !selectedDay) {
             console.error("Seleccione un horario antes de reservar.");
             return;
@@ -142,27 +147,35 @@ export default function Horario() {
     
         fetch('http://127.0.0.1:8080/api/reservas', {
             method: 'POST',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${cookies.jwt}`
             },
             body: JSON.stringify(reservaData),
         })
         .then(response => {
             if (!response.ok) {
-                throw new Error('Error al reservar.');
+                throw new Error('Error al reservar.'); // Lanza un error si el estado de la respuesta no es ok
             }
+            return response.json(); // Si la respuesta es exitosa, convierte la respuesta a JSON
+        })
+        .then(data => {
             // Aquí puedes realizar cualquier acción adicional después de una reserva exitosa, como mostrar un mensaje de éxito.
-            console.log('Reserva exitosa');
+            console.log('Reserva exitosa', data);
+            alert("Reserva exitosa. Será redirigido al inicio.");
+            navigate("/");
         })
         .catch(error => {
-            console.error('Error:', error);
-            // Aquí puedes manejar errores de reserva, como mostrar un mensaje de error al usuario.
+            console.error('Error:', error.message);
+            if (!cookies.jwt) {
+                alert("Necesita logearse para hacer una reserva.");
+                return;
+            }else{
+                alert("Error al realizar la reserva. Por favor, inténtelo de nuevo.");
+            }
         });
-
-        alert("Reserva exitosa. Será redirigido al inicio.");
-        navigate("/");
     };
-
 
 
     const mondayDate = new Date(selectedWeek.split('-').reverse().join('-'));
