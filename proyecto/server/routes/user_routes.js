@@ -2,6 +2,7 @@ const express = require('express');
 
 
 const { login, signup, protect } = require('../controllers/authenticationController');
+const { getReservasByUsuario } = require('../controllers/reservaController');
 
 const router = express.Router();
 
@@ -13,6 +14,11 @@ router.delete('/logout', (req, res, next) => {
   res.clearCookie('jwt', { path: '/' });
   res.sendStatus(204); 
 });
+
+router.use(protect);
+// alcance de alumno,profe
+router.get('/reservas/:rol', getReservasByUsuario);
+
 
 /*
 //PROTECT MIDDLEWARE

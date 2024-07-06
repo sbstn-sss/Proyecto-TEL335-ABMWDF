@@ -56,6 +56,28 @@ exports.getReservasByFecha = catchAsync(async (req,res,next) =>{
   });
 });
 
+
+exports.getReservasByUsuario = catchAsync(async (req,res,next) =>{
+  const user = await Usuario.findOne({rol: req.params.rol});
+
+  if(!user) return next(new AppError('El rol ingresado no existe.', 404));
+
+
+  const reservas = await Reserva.find({
+    rol: req.params.rol
+  });
+
+  // no hay error si no se encuentran reservas, quiere decir que esa semana esta disponible del todo
+  res.status(200).json({
+    status: 'success',
+    data: {
+      reservas
+    }
+  });
+});
+
+
+
 // implementar get by semana. ( recibe de parametro el lunes de esa semana ( retorna todas las reservas de ese lunes, hasta el viernes ))
 exports.getReservasBySemana = catchAsync(async (req,res,next) =>{
   const cancha = await Cancha.findOne({slug: req.params.cancha});
