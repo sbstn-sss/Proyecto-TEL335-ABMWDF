@@ -131,10 +131,7 @@ export default function Horario() {
     };
 
     const reservar = () => {
-        if (!cookies.jwt) {
-            alert("Necesita logearse para hacer una reserva.");
-            return;
-        }
+        
         
         if (!selectedTime || !selectedDay) {
             console.error("Seleccione un horario antes de reservar.");
@@ -158,21 +155,26 @@ export default function Horario() {
             body: JSON.stringify(reservaData),
         })
         .then(response => {
-            /*if (!response.ok) {
-                throw new Error('Error al reservar.');
-            }*/
+            if (!response.ok) {
+                throw new Error('Error al reservar.'); // Lanza un error si el estado de la respuesta no es ok
+            }
+            return response.json(); // Si la respuesta es exitosa, convierte la respuesta a JSON
+        })
+        .then(data => {
             // Aquí puedes realizar cualquier acción adicional después de una reserva exitosa, como mostrar un mensaje de éxito.
-            console.log('Reserva exitosa');
+            console.log('Reserva exitosa', data);
             alert("Reserva exitosa. Será redirigido al inicio.");
             navigate("/");
         })
         .catch(error => {
-            console.error('Error:', error);
-            // Aquí puedes manejar errores de reserva, como mostrar un mensaje de error al usuario.
-            alert("alo")
-            return;
+            console.error('Error:', error.message);
+            if (!cookies.jwt) {
+                alert("Necesita logearse para hacer una reserva.");
+                return;
+            }else{
+                alert("Error al realizar la reserva. Por favor, inténtelo de nuevo.");
+            }
         });
-
     };
 
 

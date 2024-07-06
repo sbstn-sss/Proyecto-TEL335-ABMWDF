@@ -1,5 +1,5 @@
 import React from 'react';
-import Cookies from 'js-cookie';
+import { useCookies } from 'react-cookie'; 
 import { BrowserRouter as Router, Route, Switch, Link, Routes, useNavigate  } from 'react-router-dom';
 
 function Header() {
