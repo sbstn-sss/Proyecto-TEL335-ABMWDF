@@ -152,7 +152,7 @@ exports.createReserva = catchAsync(async (req, res, next) => {
     const [day, month, year] = dia_reservado.split('-');
     const fechaInicial = new Date(year, month - 1, day); // Crear el objeto Date correctamente
 
-    console.log(fechaInicial);
+    //console.log(fechaInicial);
     const reservas = [];
 
     for (let i = 0; i < num_semanas; i++) {
@@ -206,7 +206,7 @@ exports.createReserva = catchAsync(async (req, res, next) => {
     // Se registra la reserva para un usuario normal
     const reserva = await Reserva.create(filteredBody); // Al hacer create, se ejecutan las validaciones
 
-    const message = `Estimado ${user.name}\n\nSu reserva ha sido confirmada para el Bloque ${reserva.bloque}.\nRecuerda confirmar presencialmente antes del horario seleccionado; de lo contrario, se eliminará la reserva. También, en caso de no poder asistir, puedes cancelar tu reserva.\n\nSaludos!`;
+    const message = `Estimado ${user.name}\n\nSu reserva ha sido registrada para el Bloque ${reserva.bloque}.\nRecuerda confirmar presencialmente antes del horario seleccionado; de lo contrario, se eliminará la reserva. También, en caso de no poder asistir, puedes cancelar tu reserva.\n\nSaludos!`;
 
     // Envío de correo electrónico
     await sendEmail({
@@ -228,10 +228,22 @@ exports.createReserva = catchAsync(async (req, res, next) => {
 /// metodo solo para el admin
 exports.confirmarReserva = catchAsync(async (req, res, next) => {
   const id = req.params.id;
-  await Reserva.findByIdAndUpdate( id, {estado: "confirmada"}); //
+  const user = req.user;
+
+  const reserva = await Reserva.findByIdAndUpdate( id, {estado: "confirmada", activa: false}); //
   
-  res.status(204).json({
+  const message =  `Estimado ${user.name}\n\nSu reserva ha sido confirmada para el día de hoy (${reserva.dia_reservado}) Bloque ${reserva.bloque}.\n\nSaludos!`;
+
+  // envío de correo electrónico
+  await sendEmail({
+    email: user.email,
+    subject: 'Tu reserva ha sido confirmada',
+    message,
+  });
+  
+  res.status(200).json({
     status: 'success',
+    message: 'Notificación enviada al email.',
     data: null
   });
 });
@@ -241,10 +253,17 @@ exports.confirmarReserva = catchAsync(async (req, res, next) => {
 
 exports.cancelarReserva = catchAsync(async (req, res, next) => {
   const id = req.params.id;
-  await Reserva.findByIdAndUpdate( id, {activa: false}); // recibe el id de la reserva y la desactiva logicamente ( no la elimina )
-  
-  res.status(204).json({
+
+  const user = req.user;
+
+  //reserva = await Reserva.findByIdAndUpdate( id, {activa: false}); // recibe el id de la reserva y la desactiva logicamente ( no la elimina )
+  const reserva = Reserva.findOneAndUpdate({rol: user.rol, id: id},{activa:false});
+  console.log(reserva);
+
+
+  res.status(200).json({
     status: 'success',
+    message: 'Notificación enviada al email.',
     data: null
   });
 });

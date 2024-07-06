@@ -48,7 +48,7 @@ export default function Log() {
           // Maneja los datos recibidos
           //console.log(data.data);
           const {id, email, name, rol, role} = data.data.user;
-          console.log(id, email, name, rol, role);
+          //console.log(id, email, name, rol, role);
 
           setCookie('jwt', data.token, { path: '/' , sameSite: 'none', secure: true});
           setCookie('id_usuario', id, { path: '/' , sameSite: 'none', secure: true});
@@ -56,7 +56,7 @@ export default function Log() {
           setCookie('nombre', name, { path: '/' , sameSite: 'none', secure: true});
           setCookie('rol', rol, { path: '/' , sameSite: 'none', secure: true});
           setCookie('tipo_usuario', role, { path: '/' , sameSite: 'none', secure: true});
-          console.log(cookies);
+          //console.log(cookies);
           navigate("/");
 
         })

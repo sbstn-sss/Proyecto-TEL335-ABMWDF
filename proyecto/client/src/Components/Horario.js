@@ -120,7 +120,7 @@ export default function Horario() {
     };
 
     const getWeekDays = (mondayDate) => {
-        const weekDays = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
+        const weekDays = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes'];
         const dates = [];
         for (let i = 1; i < 6; i++) {
             const day = new Date(mondayDate);
@@ -162,15 +162,19 @@ export default function Horario() {
         })
         .then(data => {
             // Aquí puedes realizar cualquier acción adicional después de una reserva exitosa, como mostrar un mensaje de éxito.
-            console.log('Reserva exitosa', data);
-            alert("Reserva exitosa. Será redirigido al inicio.");
-            navigate("/");
+            if(data.status === "success"){
+                console.log('Reserva exitosa', data);
+                alert("Reserva exitosa. Será redirigido al inicio.");
+                navigate("/");
+            } else {
+                console.log('Error en su reserva:', data);
+                alert(`Error al reservar:\n ${data.message}`);
+            }
         })
         .catch(error => {
-            console.error('Error:', error.message);
+            console.error('Error:', error);
             if (!cookies.jwt) {
                 alert("Necesita logearse para hacer una reserva.");
-                return;
             }else{
                 alert("Error al realizar la reserva. Por favor, inténtelo de nuevo.");
             }

@@ -59,7 +59,7 @@ export default function SignUp() {
                     .then(response => response.json())
                     .then(data => {
                       // Maneja los datos recibidos
-                      console.log(data);
+                      //console.log(data);
                     })
                     .catch(error => {
                       // Maneja cualquier error

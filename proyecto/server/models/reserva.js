@@ -72,7 +72,7 @@ reservaSchema.pre('save', async function(next){ // se guarda el tipo de usuario 
 
   // reserva activa unica para el usuario
   const reservas = await (Reserva.find({rol: this.rol, activa: true}));
-  console.log(reservas);
+  //console.log(reservas);
   if(reservas.length >= 1 && user.role === "alumno")  return next(new AppError('Usted ya tiene una reserva activa.', 401));
 
   
@@ -202,7 +202,7 @@ reservaSchema.pre('save', async function(next){  // Validacion si la reserva fue
 
   if(this.fecha.getDate() != dia) return next();
 
-  console.log("dia de hoy");
+  //console.log("dia de hoy");
   
   const hours = this.fecha.getHours();
   const minutes = this.fecha.getMinutes();
@@ -236,7 +236,7 @@ reservaSchema.pre('save', async function(next){ // se guarda el tipo de usuario 
   const lim_inf = Number(franja_array[1].split('-')[1]);
 
   const [inicio, fin] = this.bloque.split('-').map((val) => Number(val));
-  console.log(`[${inicio} - ${fin}] , franja: [${lim_sup} - ${lim_inf}]`);
+  //console.log(`[${inicio} - ${fin}] , franja: [${lim_sup} - ${lim_inf}]`);
   if((fin < lim_sup) || (inicio > lim_inf)) return next(new AppError('Reserva realizada en un bloque fuera de la franja horaria de la cancha', 401));;
   
   next();
@@ -248,6 +248,34 @@ reservaSchema.pre('save', async function(next){ // se guarda el tipo de usuario 
   
   this.estado = 'confirmada';
   
+  next();
+});
+
+// middleware para validacion en actualizacion
+reservaSchema.pre('findOneAndUpdate', async function(next) {
+  const update = this.getUpdate();
+  if (update.estado !== 'confirmada') return next();
+
+  const reserva = await this.model.findOne(this.getQuery());
+  const [dia, mes, year] = reserva.dia_reservado.split('-').map(Number);
+  const diaReservado = new Date(year, mes - 1, dia);
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  if (today.getTime() !== diaReservado.getTime()) {
+    return next(new AppError('La confirmación solo puede realizarse el mismo día de la reserva.', 401));
+  }
+
+  const hours = today.getHours();
+  const minutes = today.getMinutes();
+  const seconds = today.getSeconds();
+
+  const currentTime = new Date(1970, 0, 1, hours, minutes, seconds);
+  if (currentTime > reserva.hora_final_bloque) {
+    return next(new AppError('No se puede confirmar la reserva después de la hora de fin del bloque.', 401));
+  }
+
   next();
 });
 

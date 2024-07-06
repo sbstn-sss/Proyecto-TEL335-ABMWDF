@@ -166,7 +166,7 @@
 
 
 .Green_Block{
-    background-color: rgb(128, 255, 160);
+    background-color: #65dd73;
     width: 50px;
     height: 25px;
     border-color: #000000;
@@ -175,7 +175,7 @@
 
 
 .Red_Block{
-    background-color: rgb(255, 98, 98);
+    background-color: #d60019;
     width: 50px;
     height: 25px;
 }
