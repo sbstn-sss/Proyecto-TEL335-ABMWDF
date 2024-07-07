@@ -57,6 +57,8 @@ exports.getReservasByFecha = catchAsync(async (req,res,next) =>{
 });
 
 
+
+
 exports.getReservasByUsuario = catchAsync(async (req,res,next) =>{
   const user = await Usuario.findOne({rol: req.params.rol});
 
@@ -65,7 +67,7 @@ exports.getReservasByUsuario = catchAsync(async (req,res,next) =>{
 
   const reservas = await Reserva.find({
     rol: req.params.rol
-  });
+  }).populate('id_cancha', 'nombre') ;
 
   // no hay error si no se encuentran reservas, quiere decir que esa semana esta disponible del todo
   res.status(200).json({
@@ -81,7 +83,7 @@ exports.getMyReservas = catchAsync(async (req,res,next) =>{
 
   const reservas = await Reserva.find({
     rol: user.rol
-  });
+  }).populate('id_cancha', 'nombre');
 
   // no hay error si no se encuentran reservas, quiere decir que esa semana esta disponible del todo
   res.status(200).json({
@@ -206,7 +208,7 @@ exports.createReserva = catchAsync(async (req, res, next) => {
     // Se registra la reserva para un usuario normal
     const reserva = await Reserva.create(filteredBody); // Al hacer create, se ejecutan las validaciones
 
-    const message = `Estimado ${user.name}\n\nSu reserva ha sido registrada para el Bloque ${reserva.bloque}.\nRecuerda confirmar presencialmente antes del horario seleccionado; de lo contrario, se eliminará la reserva. También, en caso de no poder asistir, puedes cancelar tu reserva.\n\nSaludos!`;
+    const message = `Estimado ${user.name}\n\nSu reserva ha sido registrada para el Bloque ${reserva.bloque} del día ${reserva.dia_reservado}.\nRecuerda confirmar presencialmente antes del horario seleccionado; de lo contrario, se eliminará la reserva. También, en caso de no poder asistir, puedes cancelar tu reserva.\n\nSaludos!`;
 
     // Envío de correo electrónico
     await sendEmail({
@@ -257,15 +259,13 @@ exports.cancelarReserva = catchAsync(async (req, res, next) => {
   const user = req.user;
 
   const reserva = await Reserva.findOne({_id:id, rol:user.rol, activa:true});
+  
+  console.log('res',reserva);
   if(!reserva)return next(new AppError('La reserva no existe o no es cancelable!', 401));
 
-
-  //console.log(reserva);
-
-  await Reserva.findByIdAndUpdate( reserva._id, {activa: false}); // recibe el id de la reserva y la desactiva logicamente ( no la elimina )
-  //console.log(update);
-
   
+  await Reserva.findByIdAndUpdate( reserva._id, {activa: false}); // recibe el id de la reserva y la desactiva logicamente ( no la elimina )
+
 
   const message =  `Estimado ${user.name}\n\nSu reserva del Bloque ${reserva.bloque} del dia ${reserva.dia_reservado} ha sido cancelada.\n\nSaludos!`;
 

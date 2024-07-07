@@ -44,7 +44,7 @@ export default function Canchas() {
     
       <div className="container">
           
-        <div>
+        <div style={{justifyContent: "space-between"}}>
   
           <h1 className="font">Canchas</h1>
   

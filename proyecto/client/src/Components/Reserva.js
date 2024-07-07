@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
-import './css/reserva.css';
-import { useCookies } from 'react-cookie'; 
+import './css/reserva.css'; 
 
 export default function Reserva() {
-<<<<<<< Updated upstream
   const [reservas, setReservas] = useState([]);
   const [cookies] = useCookies(['jwt']);
+  const [reservaAct, setReservaAct] = useState(null);
 
-  useEffect(() => {
-    // Fetch the user's reservations
+  const fetchReservas = () => {
     fetch('http://127.0.0.1:8080/api/users/reservas/mine', {
       method: 'GET',
       credentials: 'include',
@@ -20,14 +18,25 @@ export default function Reserva() {
       .then(response => response.json())
       .then(data => {
         setReservas(data.data.reservas);
+        console.log(data.data.reservas);
       })
       .catch(error => {
         console.error('Error fetching reservations:', error);
       });
+  };
+
+  useEffect(() => {
+    fetchReservas();
   }, [cookies.jwt]);
 
+  useEffect(() => {
+    const activeReserva = reservas.find(reserva => reserva.activa);
+    setReservaAct(activeReserva);
+    console.log(activeReserva);
+  }, [reservas]);
+
   const handleCancel = (reservationId) => {
-    fetch(`http://127.0.0.1:8080/api/users/reservas/${reservationId}`, {
+    fetch(`http://127.0.0.1:8080/api/reservas/${reservationId}`, {
       method: 'DELETE',
       credentials: 'include',
       headers: {
@@ -36,9 +45,8 @@ export default function Reserva() {
     })
       .then(response => {
         if (response.ok) {
-          // Actualizar el estado local para reflejar la cancelación
-          setReservas(prevReservas => prevReservas.filter(reserva => reserva._id !== reservationId));
-          // Mostrar una notificación o mensaje de éxito
+          fetchReservas();
+          
         } else {
           console.error('Error al cancelar la reserva');
         }
@@ -50,82 +58,50 @@ export default function Reserva() {
 
   return (
     <div className="container">
-      {reservas.length > 0 ? reservas.map((reserva, index) => (
-        <div className="caja" key={reserva.id}>
-          <h1 className="font">Estado</h1>
-          <div>
+      <h1>Tus Reservas</h1>
+      <div className="caja">
+        <h2>Estado</h2>
+        {reservaAct ? (
+          <div key={reservaAct.id}>
             <div className="header">
-              <h1 className="font">Reserva {index + 1}:</h1>
-              <h1 className={reserva.confirmed ? 'Confirm' : 'Pending'}>
-                {reserva.confirmed ? 'Confirmada' : 'Por confirmar'}
-              </h1>
-              <button className="Cancel" onClick={() => handleCancel(reserva.id)}>Cancelar</button>
+              <p className="font">Reserva Activa:</p>
+              <p className={(reservaAct.estado === "confirmada") ? 'Confirm' : 'Pending'}>
+                {reservaAct.confirmed ? 'Confirmada' : 'Por confirmar'}
+              </p>
+              <button className="Cancel" onClick={() => handleCancel(reservaAct.id)}>Cancelar</button>
             </div>
             <div className="details">
-              <p>Cancha: {reserva.id_cancha.nombre}</p>
-              <p>Fecha: {new Date(reserva.fecha).toLocaleDateString()}</p>
-              <p>Hora: {reserva.bloque}</p>
+              <p>Cancha: {reservaAct.id_cancha.nombre}</p>
+              <p>Fecha: {reservaAct.dia_reservado}</p>
+              <p>Bloque: {reservaAct.bloque}</p>
             </div>
           </div>
-        </div>
-      )) : (
-        <p>No hay reservas disponibles.</p>
-      )}
-=======
-  const [cookies, setCookie, removeCookie] = useCookies(['jwt', 'id_usuario', 'email', 'nombre', 'rol', 'tipo_usuario']);
+        ) : (
+          <p>Usted no tiene ninguna reserva activa.</p>
+        )}
 
-  const getReservas = () => {
-
-
-    fetch(`http://127.0.0.1:8080/api/users/reservas/mine`, {
-      method: 'GET',
-      credentials: 'include',
-      headers: {
-          'Content-Type': 'application/json',
-      },
-   })
-    .then(response => response.json())
-    .then(data => {
-
-      var cont = 0;
-        data.forEach(datos => {
-          
-          cont += 1;
-          <div class="header">
-            <h1 class="font">Reserva {cont}:</h1>
-            <h1 class="Confirm">Por confirmar</h1>
-            <h1 class="font">{datos.data.reservas.fecha}</h1>
-
-            <button class="Cancel">Cancelar</button>
-
-            <div class="Flex">
-
-
+        <h2>Historial:</h2>
+        {reservas.length > 0 ? reservas
+          .filter(reserva => !reserva.activa)
+          .map((reserva, index) => (
+            <div key={reserva.id}>
+              <div className="header">
+                <div className="details">
+                  <p>{reserva.id_cancha.nombre}</p>
+                  <p>Fecha: {reserva.dia_reservado}</p>
+                  <p>Bloque: {reserva.bloque}</p>
+                </div>
+                <div className='state-cancelar'>
+                  <p className={(reserva.estado === "confirmada") ? 'Confirm' : 'Cancelada'}>
+                    {(reserva.estado === "confirmada") ? 'Confirmada' : 'Cancelada'}
+                  </p>
+                </div>
+              </div>
             </div>
-          </div>
-
-        });
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
-   
-
-  }
-
-
-  return (
-    <div>
-
-
-      <div class="caja">
-        <h1 class="font">Estado</h1>
-        <div>
-            {getReservas()}
-         </div>  
+          )) : (
+          <p>Usted no tiene mas reservas registradas.</p>
+        )}
       </div>
->>>>>>> Stashed changes
     </div>
   );
 }
-

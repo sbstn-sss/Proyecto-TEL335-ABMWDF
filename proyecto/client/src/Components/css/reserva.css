@@ -129,10 +129,12 @@
 
   .header{
 
-    display: inline-block;
-    flex-direction: column;
+    display: flex;
+    flex-direction: row;
+    padding: 10px 20px;
     row-gap: 20px;
     max-width: 1000px;
+    min-width: 800px;
     margin-right: 20px;
     margin-bottom: 20px;
     background-color: #fff;
@@ -142,7 +144,7 @@
     transition: all 0.3s ease; 
     background-image: linear-gradient(to right top, #ffffff, #f9f9f9);*/
     align-items: center;
-
+    justify-content: space-between;
   }
 
 
@@ -165,19 +167,37 @@
 
     display: inline-block;
     font-weight:normal;
-    color: #ff7300;
+    color: #098054;
+    font-size: 20px;
+    text-align: left;
+
+  }
+
+  .Pending{
+
+
+    display: inline-block;
+    font-weight:normal;
+    color: #f7ae00;
     font-size: 20px;
     text-align: left;
 
   }
 
   .Cancel{
+    background-color: #d60019;
+    border-style: solid;
+    padding: 10px;
+    color: #fff;
+    font-size: 20px;
 
+  }
 
+  .Cancelada{
     background-color: white;
     border-color: #ffffff;
     border-style: solid;
-    color: rgb(255, 46, 46);
+    color: #d60019;
     font-size: 20px;
   }
 
@@ -200,3 +220,8 @@
     align-items: center;
   }
 
+.state-cancelar{
+  display: flex;
+  flex-direction: row;
+  column-gap: 30px;
+}
