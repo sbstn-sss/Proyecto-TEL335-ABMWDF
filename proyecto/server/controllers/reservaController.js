@@ -260,7 +260,7 @@ exports.cancelarReserva = catchAsync(async (req, res, next) => {
 
   const reserva = await Reserva.findOne({_id:id, rol:user.rol, activa:true});
   
-  console.log('res',reserva);
+
   if(!reserva)return next(new AppError('La reserva no existe o no es cancelable!', 401));
 
   

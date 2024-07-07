@@ -1,8 +1,9 @@
 const express = require('express');
 
 
-const { login, signup, protect } = require('../controllers/authenticationController');
+const { login, signup, protect, restrictTo } = require('../controllers/authenticationController');
 const {getMyReservas } = require('../controllers/reservaController');
+const { getAllUsers, getNormalUsers } = require('../controllers/userController');
 
 const router = express.Router();
 
@@ -19,6 +20,12 @@ router.use(protect);
 // alcance de alumno,profe
 router.get('/reservas/mine', getMyReservas);
 
+// alcance de admin
+
+router.use(restrictTo('admin'));
+
+router.get('/', getAllUsers);
+router.get('/normal/', getNormalUsers);
 
 /*
 //PROTECT MIDDLEWARE

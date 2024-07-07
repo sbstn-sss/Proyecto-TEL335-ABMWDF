@@ -165,6 +165,8 @@ reservaSchema.pre('save', function(next){ // asignacion de las horas
 }); 
 
 reservaSchema.pre('save', function(next){ // validacion de que si el usuario es alumno, que no se reserve para fechas muy futuras(14 dias) o para dias pasados
+  //console.log(this.tipo_usuario, 'Por lo que se salta la restriccion de fecha');
+  
   if(this.tipo_usuario == 'profesor') return next();
 
   // Asegurarse de que this.fecha y this.dia_reservado sean objetos Date
@@ -199,10 +201,11 @@ reservaSchema.pre('save', function(next){ // validacion de que si el usuario es 
 
 reservaSchema.pre('save', async function(next){  // Validacion si la reserva fue realizada en una hora adecuada
   [dia,mes,year] = this.dia_reservado.split('-');
+  
+  // condicion que si es otro dia, no se evalua la hora
+  if(this.fecha.getDate() != dia || (this.fecha.getMonth() + 1) != mes || this.fecha.getFullYear() != year) return next();
 
-  if(this.fecha.getDate() != dia) return next();
-
-  //console.log("dia de hoy");
+  //console.log(this.dia_reservado,"dia de hoy", mes, this.fecha.getMonth() + 1, this.fecha.getFullYear());
   
   const hours = this.fecha.getHours();
   const minutes = this.fecha.getMinutes();
