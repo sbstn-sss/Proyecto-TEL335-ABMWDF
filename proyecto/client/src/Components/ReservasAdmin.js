@@ -11,13 +11,11 @@ export default function ReservaAdmin() {
   const mes = hoy.getMonth() + 1; 
   const año = hoy.getFullYear();
 
-  //const d = dia < 10 ? "0" + dia.toString() : dia.toString();
+  const d = dia < 10 ? "0" + dia.toString() : dia.toString();
   const m = mes < 10 ? "0" + mes.toString() : mes.toString();
   const a = año.toString();
-  const d = "08";
 
   useEffect(() => {
-    // Fetch the user's reservations
     fetch('http://127.0.0.1:8080/api/canchas/', {
       method: 'GET',
       credentials: 'include',
@@ -27,12 +25,14 @@ export default function ReservaAdmin() {
     })
     .then(response => response.json())
     .then(data => {
+      // Limpiar el estado de reservas antes de buscar nuevas reservas
+      setReservas([]);
+
+      // Recorrer las canchas y obtener las reservas para cada una
       data.data.canchas.forEach(element => {
         var res = element.nombre.toLowerCase();
         get_reservas_al_dia(res);
-        alert(res);
       });
-       // Si("cancha-de-futbol-2");
     })
     .catch(error => {
       console.error('Error fetching reservations:', error);
@@ -41,23 +41,22 @@ export default function ReservaAdmin() {
 
   const get_reservas_al_dia = (Id_Canchas) => {
     fetch(`http://127.0.0.1:8080/api/reservas/${Id_Canchas}/${d}-${m}-${a}`, {
-      method: 'GET',
-      credentials: 'include',
-      headers: {
-        'Authorization': `Bearer ${cookies.jwt}`
-      }
-    })
-    .then(response => response.json()) // Convierte la respuesta a JSON
-    .then(data => {
-
-      if(data != null){
-      //setReservas(data.reservas);
-      alert(data.data.reserva.rol);
-      }
-    })
-    .catch(error => {
-      console.error('Error al cancelar la reserva:', error);
-    });
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+          'Authorization': `Bearer ${cookies.jwt}`
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.data.reservas.length > 0) {
+          // Actualizar el estado de reservas usando setReservas
+          setReservas(prevReservas => [...prevReservas, ...data.data.reservas]);
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching reservations:', error);
+      });
   };
 
   return (
