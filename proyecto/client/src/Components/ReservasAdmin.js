@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
-import './css/admin.css';
+import './css/reserva.css';
 
 export default function ReservaAdmin() {
   const [cookies] = useCookies(['jwt']);
@@ -25,19 +25,13 @@ export default function ReservaAdmin() {
     })
     .then(response => response.json())
     .then(data => {
-      // Usar un Set para evitar duplicados
-      const uniqueReservas = new Set();
+      // Limpiar el estado de reservas antes de buscar nuevas reservas
+      setReservas([]);
 
-      const fetchReservations = data.data.canchas.map(element => {
-        const res = element.nombre.toLowerCase();
-        return get_reservas_al_dia(res, uniqueReservas);
-      });
-
-      // Esperar a que todas las peticiones se completen
-      Promise.all(fetchReservations).then(() => {
-        // Convertir el Set a un array de objetos y actualizar el estado
-        const reservasArray = Array.from(uniqueReservas).map(reservaString => JSON.parse(reservaString));
-        setReservas(reservasArray);
+      // Recorrer las canchas y obtener las reservas para cada una
+      data.data.canchas.forEach(element => {
+        var res = element.nombre.toLowerCase();
+        get_reservas_al_dia(res);
       });
     })
     .catch(error => {
@@ -45,25 +39,24 @@ export default function ReservaAdmin() {
     });
   }, [cookies.jwt]);
 
-  const get_reservas_al_dia = (Id_Canchas, uniqueReservas) => {
-    return fetch(`http://127.0.0.1:8080/api/reservas/${Id_Canchas}/${d}-${m}-${a}`, {
-      method: 'GET',
-      credentials: 'include',
-      headers: {
-        'Authorization': `Bearer ${cookies.jwt}`
-      }
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data.data.reservas.length > 0) {
-        data.data.reservas.forEach(reserva => {
-          uniqueReservas.add(JSON.stringify(reserva)); // Convertir a string para evitar duplicados
-        });
-      }
-    })
-    .catch(error => {
-      console.error('Error fetching reservations:', error);
-    });
+  const get_reservas_al_dia = (Id_Canchas) => {
+    fetch(`http://127.0.0.1:8080/api/reservas/${Id_Canchas}/${d}-${m}-${a}`, {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+          'Authorization': `Bearer ${cookies.jwt}`
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.data.reservas.length > 0) {
+          // Actualizar el estado de reservas usando setReservas
+          setReservas(prevReservas => [...prevReservas, ...data.data.reservas]);
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching reservations:', error);
+      });
   };
 
   return (
@@ -73,8 +66,7 @@ export default function ReservaAdmin() {
           <h1 className="font">Estado</h1>
           <div>
             <div className="header">
-              <h5 className="font">Reserva {index + 1}:</h5>
-              <h5 className="font">Reserva {index + 1}:</h5>
+              <h1 className="font">Reserva {index}:</h1>
             </div>
             <div className="details">
               <p>Cancha: {reserva.id_cancha}</p>
