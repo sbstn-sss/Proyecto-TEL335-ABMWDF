@@ -33,7 +33,13 @@ function Header() {
 
   const Reservas = () => {
 
-    navigate(`/Reserva`);
+    if (cookies.tipo_usuario === "admin"){
+    navigate(`/ReservaAdmin`);
+    } else {
+
+      navigate(`/Reserva`);
+
+    }
    
 
   };

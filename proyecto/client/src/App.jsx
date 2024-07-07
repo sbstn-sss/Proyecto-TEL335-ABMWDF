@@ -11,6 +11,7 @@ import Canchas from './Components/Canchas';
 import Horario from './Components/Horario';
 import Header from './Components/header';
 import Reserva from './Components/Reserva';
+import ReservasAdmin from './Components/ReservasAdmin';
 
 /*Variale global*/ 
 // colores usm azuL: #004B85 / verde: #008452 / rojo: #D60019 / amarillo: #F7AE00 / #000000
@@ -33,6 +34,8 @@ function App() {
             <Route path = "/Canchas" element={<Canchas/>}/>
             <Route path = "/Canchas/:nombre" element={<Horario/>}/>
             <Route path = "/Reserva" element={<Reserva/>}/>
+            <Route path = "/ReservaAdmin" element={<ReservasAdmin/>}/>
+            
             
           </Routes>
         </CookiesProvider>
