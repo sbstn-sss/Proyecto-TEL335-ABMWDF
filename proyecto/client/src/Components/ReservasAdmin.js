@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
-import './css/reserva.css';
+import './css/admin.css';
 
 export default function ReservaAdmin() {
   const [cookies] = useCookies(['jwt']);
   const [reservas, setReservas] = useState([]);
 
   useEffect(() => {
+    fetchCanchasAndReservas();
+  }, [cookies.jwt]);
+
+  const fetchCanchasAndReservas = () => {
     fetch('http://127.0.0.1:8080/api/canchas/', {
       method: 'GET',
       credentials: 'include',
@@ -26,7 +30,7 @@ export default function ReservaAdmin() {
     .catch(error => {
       console.error('Error fetching courts:', error);
     });
-  }, [cookies.jwt]);
+  };
 
   const fetchReservasForToday = (slugCancha) => {
     const hoy = new Date();
@@ -82,15 +86,16 @@ export default function ReservaAdmin() {
 
   return (
     <div className="container">
+      <h1>Reservas Administrativas</h1>
       {reservas.length > 0 ? (
         <div className="reservas-grid">
           {reservas.map((reserva, index) => (
             <div className="reserva-box" key={index}>
-              <h1 className="font">Reserva {index + 1}</h1>
+              <h2 className="font">Reserva {index + 1}</h2>
               <p>Cancha: {reserva.id_cancha.nombre}</p>
               <p>Fecha: {reserva.dia_reservado}</p>
               <p>Hora: {reserva.bloque}</p>
-              <button onClick={() => handleCancel(reserva._id)}>Eliminar</button>
+              <button onClick={() => handleCancel(reserva._id)}>Cancelar Reserva</button>
             </div>
           ))}
         </div>
