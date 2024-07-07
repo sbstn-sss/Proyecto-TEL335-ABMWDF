@@ -60,11 +60,11 @@ export default function Reserva() {
   return (
     <div className="container">
       <h1>Tus Reservas</h1>
-      <div className="caja">
+      <div className="caja_res">
         <h2>Estado</h2>
         {reservaAct ? (
           <div key={reservaAct.id}>
-            <div className="header">
+            <div className="header_res">
               <p className="font">Reserva Activa:</p>
               <p className={(reservaAct.estado === "confirmada") ? 'Confirm' : 'Pending'}>
                 {reservaAct.confirmed ? 'Confirmada' : 'Por confirmar'}
@@ -86,14 +86,14 @@ export default function Reserva() {
           .filter(reserva => !reserva.activa)
           .map((reserva, index) => (
             <div key={reserva.id}>
-              <div className="header">
-                <div className="details">
+              <div className="header_res">
+                <div>
                   <p>{reserva.id_cancha.nombre}</p>
                   <p>Fecha: {reserva.dia_reservado}</p>
                   <p>Bloque: {reserva.bloque}</p>
                 </div>
                 <div className='state-cancelar'>
-                  <p className={(reserva.estado === "confirmada") ? 'Confirm' : 'Cancelada'}>
+                  <p className={(reserva.estado === "confirmada") ? 'Confirm_res' : 'Cancelada_res'}>
                     {(reserva.estado === "confirmada") ? 'Confirmada' : 'Cancelada'}
                   </p>
                 </div>

@@ -26,6 +26,8 @@ function Header() {
         console.error('Logout failed');
       }
     });
+
+    navigate(`/`);
   
   };
 

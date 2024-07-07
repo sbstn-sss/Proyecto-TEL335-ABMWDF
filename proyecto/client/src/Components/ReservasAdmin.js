@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
-import './css/reservaadmin.css';
+import './css/admin.css';
 
 export default function ReservaAdmin() {
   const [cookies] = useCookies(['jwt']);

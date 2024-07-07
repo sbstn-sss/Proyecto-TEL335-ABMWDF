@@ -152,7 +152,7 @@ exports.createReserva = catchAsync(async (req, res, next) => {
 
     // Convertir la fecha de entrada a un objeto Date
     const [day, month, year] = dia_reservado.split('-');
-    const fechaInicial = new Date(year, month - 1, day); // Crear el objeto Date correctamente
+    const fechaInicial = new Date(year, month - 1, day); 
 
     //console.log(fechaInicial);
     const reservas = [];

@@ -250,6 +250,7 @@ reservaSchema.pre('save', async function(next){ // se guarda el tipo de usuario 
   if(this.tipo_usuario != 'profesor') return next();
   
   this.estado = 'confirmada';
+  this.activa = false;
   
   next();
 });
