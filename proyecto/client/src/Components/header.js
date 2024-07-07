@@ -24,12 +24,6 @@ function Header() {
         console.error('Logout failed');
       }
     });
-<<<<<<< Updated upstream
-
-    navigate(`/`);
-  
-=======
->>>>>>> Stashed changes
   };
 
   const Reservas = () => {
