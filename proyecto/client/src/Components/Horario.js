@@ -27,6 +27,7 @@ export default function Horario() {
         const diffToMonday = (today.getDay() === 0) ? 6 : today.getDay() - 1;
         const mondayDate = new Date(today);
         mondayDate.setDate(today.getDate() - diffToMonday);
+
         setSelectedWeek(formatDate(mondayDate));
 
         fetch(`http://127.0.0.1:8080/api/canchas/${nombre}`, {
@@ -190,12 +191,14 @@ export default function Horario() {
             <main>
                 <div className="container">
                     <div>
+                        
                         <h1 className="font">{cancha.nombre}</h1>
                         <h1 className="font" style={{ marginLeft: '50px' }}>
                             {cancha.campus === "SJ" ? "Campus San Joaquin" : "Casa Central"}
                         </h1>
                         <h1>Reservas</h1>
-                        <div className="caja">
+                        <div className="caja" style={{display: 'flex', flexDirection: 'row', columnGap: '30px' }}>
+                            <h2>Selector de semana</h2>
                             <DatePicker
                                 value={calendarWeek}
                                 onChange={handleDateChangeTest}
@@ -212,20 +215,25 @@ export default function Horario() {
                             />
                         </div>
 
-                        <div className="flex" style={{ columnGap: '10px' }}>
+                        <div className="flex" style={{ columnGap: '10px', padding: '20px' }}>
                             <div className="flex_Block">
                                 <p style={{ marginLeft:'20px' }}> Bloques de horario </p>
                                 {renderTimeBlocks()}
                             </div>
                             {weekDays.map(({ day, date }) => (
-                                <div className="flex_inside" style={{ width: '100px' }} key={day}>
+                                <div className="flex_inside" style={{ width: '100px', paddingBottom: '10px'}} key={day}>
                                     {day}
                                     {renderButtons(date)}
                                 </div>
                             ))}
                         </div>
+
+                        
+
                     </div>
                     <div>
+                        <p>Bloque Disponible:  #pendiente colocar codigo de color para que el usuario entienda , por ejemplo colocar un cuadrado del color especifico         Bloque Ocupado: </p>
+
                         {selectedTime && selectedDay && (
                             <p>Horario seleccionado: {selectedDay} - Bloque: {selectedTime}</p>
                         )}
