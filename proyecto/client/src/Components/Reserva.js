@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
 import './css/reserva.css'; 
 
+
 export default function Reserva() {
   const [reservas, setReservas] = useState([]);
   const [cookies] = useCookies(['jwt']);
@@ -102,6 +103,7 @@ export default function Reserva() {
           <p>Usted no tiene mas reservas registradas.</p>
         )}
       </div>
+
     </div>
   );
 }
