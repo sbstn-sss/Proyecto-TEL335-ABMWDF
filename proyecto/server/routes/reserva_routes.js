@@ -1,6 +1,6 @@
 const express = require('express');
 
-const { createReserva, getReservasByFecha, cancelarReserva, getReservasBySemana, confirmarReserva, getReservasByUsuario } = require('../controllers/reservaController');
+const { createReserva, getReservasByFecha, cancelarReserva, getReservasBySemana, confirmarReserva, getReservasByUsuario, getReservasDia } = require('../controllers/reservaController');
 const { restrictTo, protect } = require('../controllers/authenticationController');
 
 const router = express.Router();
@@ -8,6 +8,7 @@ const router = express.Router();
 
 // alcance admin
 router.get('/user/:rol', protect, restrictTo('admin'), getReservasByUsuario);
+router.get('/dia/:fecha', protect, restrictTo('admin'), getReservasDia);
 
 // alcance general
 router.get('/:cancha/:fecha', getReservasByFecha);

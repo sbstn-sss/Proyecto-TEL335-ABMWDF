@@ -57,6 +57,23 @@ exports.getReservasByFecha = catchAsync(async (req,res,next) =>{
 });
 
 
+exports.getReservasDia = catchAsync(async (req,res,next) =>{
+
+  const reservas = await Reserva.find({
+    dia_reservado: req.params.fecha
+  }).populate('id_cancha', 'nombre') ;;
+
+  // no hay error si no se encuentran reservas, quiere decir que esa semana esta disponible del todo
+  res.status(200).json({
+    status: 'success',
+    data: {
+      reservas
+    }
+  });
+});
+
+
+
 
 
 exports.getReservasByUsuario = catchAsync(async (req,res,next) =>{
