@@ -56,7 +56,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"juan.yuz@usm.cl\",\r\n    \"password\": \"webosfire123\"\r\n}",
+							"raw": "{\r\n    \"email\": \"juanjjr@usm.cl\",\r\n    \"password\": \"webosfire123\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -95,7 +95,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Sebastian Ossas\",\r\n    \"rol\": \"202130252-4\",\r\n    \"email\": \"sebastian.ossas@usm.cl\",\r\n    \"password\": \"webosfire123\",\r\n    \"passwordConfirm\": \"webosfire123\"\r\n}",
+							"raw": "{\r\n    \"name\": \"Felipe Yuzepe\",\r\n    \"rol\": \"202130242-2\",\r\n    \"email\": \"felipe.yuzepe@usm.cl\",\r\n    \"password\": \"webosfire123\",\r\n    \"passwordConfirm\": \"webosfire123\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -112,6 +112,14 @@
 								"signup"
 							]
 						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "GET",
+						"header": []
 					},
 					"response": []
 				}
@@ -168,7 +176,34 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"rol\": \"202130252-4\",\r\n    \"id_cancha\": \"6652a2c488cc3dc28ac50910\",\r\n    \"bloque\": \"5-6\",\r\n    \"dia_reservado\": \"29-05-2024\"\r\n}",
+							"raw": "{\r\n    \"rol\": \"202130252-4\",\r\n    \"id_cancha\": \"6652a2c488cc3dc28ac50910\",\r\n    \"bloque\": \"1-2\",\r\n    \"dia_reservado\": \"01-06-2024\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}api/reservas/",
+							"host": [
+								"{{URL}}api"
+							],
+							"path": [
+								"reservas",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reservar Bloque Profe",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"rol\": \"202130244-2\",\r\n    \"id_cancha\": \"6652a2c488cc3dc28ac50910\",\r\n    \"bloque\": \"7-8\",\r\n    \"dia_reservado\": \"12-07-2024\",\r\n    \"num_semanas\": \"5\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -240,6 +275,71 @@
 							"path": [
 								"reservas",
 								"(por implementar)"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Reservas Usuario",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}api/reservas/user/202130525-4",
+							"host": [
+								"{{URL}}api"
+							],
+							"path": [
+								"reservas",
+								"user",
+								"202130525-4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get My Reservas",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Confirmar Reserva",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "{{URL}}api/reservas/668875657de1f5c35e483492",
+							"host": [
+								"{{URL}}api"
+							],
+							"path": [
+								"reservas",
+								"668875657de1f5c35e483492"
 							]
 						}
 					},

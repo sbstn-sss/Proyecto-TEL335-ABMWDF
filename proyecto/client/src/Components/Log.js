@@ -70,12 +70,6 @@ export default function Log() {
 
   return (
     <div>
-
-        <link rel="stylesheet" href="./css/login.css"/>
-
-        
-
-
         <div className="container">
             <span className="icon-close"><ion-icon name="close-sharp"></ion-icon></span>
 

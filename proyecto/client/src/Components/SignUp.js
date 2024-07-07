@@ -60,17 +60,12 @@ export default function SignUp() {
                     .then(data => {
                       // Maneja los datos recibidos
                       //console.log(data);
+                      navigate("/Acceso");
                     })
                     .catch(error => {
                       // Maneja cualquier error
                       console.error('Error:', error);
                     });
-
-                    navigate("/Acceso");
-
-
-
-
             }
 
         }else{

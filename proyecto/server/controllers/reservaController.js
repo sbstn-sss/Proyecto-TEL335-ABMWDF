@@ -256,14 +256,29 @@ exports.cancelarReserva = catchAsync(async (req, res, next) => {
 
   const user = req.user;
 
-  //reserva = await Reserva.findByIdAndUpdate( id, {activa: false}); // recibe el id de la reserva y la desactiva logicamente ( no la elimina )
-  const reserva = Reserva.findOneAndUpdate({rol: user.rol, id: id},{activa:false});
-  console.log(reserva);
+  const reserva = await Reserva.findOne({_id:id, rol:user.rol, activa:true});
+  if(!reserva)return next(new AppError('La reserva no existe o no es cancelable!', 401));
 
 
-  res.status(200).json({
+  //console.log(reserva);
+
+  await Reserva.findByIdAndUpdate( reserva._id, {activa: false}); // recibe el id de la reserva y la desactiva logicamente ( no la elimina )
+  //console.log(update);
+
+  
+
+  const message =  `Estimado ${user.name}\n\nSu reserva del Bloque ${reserva.bloque} del dia ${reserva.dia_reservado} ha sido cancelada.\n\nSaludos!`;
+
+    // envío de correo electrónico
+    await sendEmail({
+      email: user.email,
+      subject: 'Tu reserva ha sido cancelada',
+      message,
+    });
+
+
+  res.status(204).json({
     status: 'success',
-    message: 'Notificación enviada al email.',
     data: null
   });
 });
