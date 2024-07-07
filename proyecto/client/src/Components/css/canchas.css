@@ -63,19 +63,17 @@
   }
 
 
-  .container {
+  .container_can {
     display: flex;
     flex-direction: column;
     row-gap: 20px;
     max-width: 1000px;
+    min-width: 800px;
     margin: 20px auto;
     padding: 40px;
     background-color: #fff;
     border-style: solid;
     border-color: #b3b0ab;
-    /*box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-    transition: all 0.3s ease; 
-    background-image: linear-gradient(to right top, #ffffff, #f9f9f9);*/
     align-items: center;
   }
 
@@ -127,7 +125,7 @@
 
   }
 
-  .header{
+  .header_can{
 
     display: inline-block;
     flex-direction: column;
@@ -145,14 +143,14 @@
 
   }
 
-
-  .caja{
+  .caja_can{
 
     display: flex;
     flex-direction: column;
     align-items: stretch;
     row-gap: 20px;
     max-width: 1000px;
+    min-width: 800px;
     margin: 20px auto;
     padding: 40px;
     background-color: #fff;
@@ -160,62 +158,9 @@
     border-color: #b3b0ab;
   }
 
-  .B1{/*Basket*/
-    vertical-align: top;
-    padding: 100px 100px;
-    font-size: large;
-    background-image:url(https://static.planetminecraft.com/files/resource_media/screenshot/1312/2013-03-18_104920_5081032_lrg.jpg) ;
-    background-size: cover;
-    background-size: contain;
-    background-repeat: no-repeat; 
-    background-position: center;
-
-
-    
+  .canchas_disp{
+    justify-content: center;
   }
-
-  .B2{
-    vertical-align: top;
-    padding: 100px 100px;
-    font-size: large;
-    background-image:url(https://pm1.aminoapps.com/6936/af3f0fdd54f86061f37ee2aff8f6cd6189dca24br1-854-480v2_hq.jpg);
-    background-size: cover;
-    background-size: contain;
-    background-repeat: no-repeat; 
-    background-position: center;
-
-
-    
-  }
-
-
-  .B3{
-    vertical-align: top;
-    padding: 100px 100px;
-    font-size: large;
-    background-image:url(https://i.pinimg.com/originals/67/4f/9d/674f9dbf43702a03bd8d56b00eb0a3b3.jpg);
-    background-size: cover;
-    transform: scaleX(-1);
-    background-size: contain;
-    background-repeat: no-repeat; 
-    background-position: center;
-
-
-    
-  }
-
-  .B4{
-    vertical-align: top;
-    padding: 100px 100px;
-    font-size: large;
-    background-image:url(https://static.planetminecraft.com/files/image/minecraft/project/2022/095/15737068-bmttitle_l.jpg);
-    background-size: cover;
-    background-size: contain;
-    background-repeat: no-repeat; 
-    background-position: center;
-    
-  }
-
 
 
 
@@ -233,38 +178,9 @@
     
   }
 
-  .B6{
-    vertical-align: top;
-    padding: 100px 100px;
-    font-size: large;
-    background-image:url(https://static.planetminecraft.com/files/resource_media/screenshot/1127/20110705_142744_148263.jpg);
-    background-size: cover;
-    background-size: contain;
-    background-repeat: no-repeat; 
-    background-position: center;
-    
-  }
 
-  .B1:hover{
-    cursor:pointer;
-  }
-
-  .B2:hover{
-    cursor:pointer;
-  }
-
-  .B3:hover{
-    cursor:pointer;
-  }
-
-  .B4:hover{
-    cursor:pointer;
-  }
 
   .B5:hover{
     cursor:pointer;
   }
 
-  .B6:hover{
-    cursor:pointer;
-  }

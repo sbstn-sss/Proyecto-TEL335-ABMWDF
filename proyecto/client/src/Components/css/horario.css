@@ -174,10 +174,23 @@
 }
 
 
-.Red_Block{
+.Red_Block_sim{
     background-color: #d60019;
     width: 50px;
     height: 25px;
+}
+
+.Orange_Block_sim{
+  background-color: orange;
+  width: 50px;
+  height: 25px;
+}
+
+
+.Green_Block_sim{
+  background-color: #65dd73;
+  width: 50px;
+  height: 25px;
 }
 
 .centrado{
@@ -192,6 +205,19 @@
     margin-left: 20px;
     margin-bottom: 8px;
 
+}
+
+.bloques_display{
+  display: flex;
+  flex-direction: row;
+  column-gap: 30px;
+}
+.xd{
+  margin-right: 10px;
+}
+.bloque_d{
+  display: flex;
+  flex-direction: row;
 }
 
 .minecraft_button{
@@ -230,5 +256,11 @@
   width: 50px;
   height: 25px;
   background-color: red;
-  cursor: pointer;
+
+}
+
+.head_hor{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }

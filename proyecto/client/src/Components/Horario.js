@@ -191,11 +191,12 @@ export default function Horario() {
             <main>
                 <div className="container">
                     <div>
-                        
-                        <h1 className="font">{cancha.nombre}</h1>
-                        <h1 className="font" style={{ marginLeft: '50px' }}>
-                            {cancha.campus === "SJ" ? "Campus San Joaquin" : "Casa Central"}
-                        </h1>
+                        <div className='head_hor'>
+                            <h1 className="font">{cancha.nombre}</h1>
+                            <h1 className="font" style={{ marginLeft: '50px' }}>
+                                {cancha.campus === "SJ" ? "Campus San Joaquin" : "Casa Central"}
+                            </h1>
+                        </div>
                         <h1>Reservas</h1>
                         <div className="caja" style={{display: 'flex', flexDirection: 'row', columnGap: '30px' }}>
                             <h2>Selector de semana</h2>
@@ -231,9 +232,21 @@ export default function Horario() {
                         
 
                     </div>
-                    <div>
-                        <p>Bloque Disponible:  #pendiente colocar codigo de color para que el usuario entienda , por ejemplo colocar un cuadrado del color especifico         Bloque Ocupado: </p>
+                    <div className="bloques_display">
+                        <div className='bloque_d'>
+                            
+                            <span className='xd'>Bloque Disponible:</span><div className="Green_Block_sim"></div>
+                        </div>
+                        <div className='bloque_d'>
 
+                            <span className='xd'>Bloque Ocupado:</span><div className="Red_Block_sim"></div>
+                        </div>
+                        <div className='bloque_d'>
+
+                            <span className='xd'>Bloque Seleccionado:</span><div className="Orange_Block_sim"></div>
+                        </div>
+                    </div>
+                    <div>
                         {selectedTime && selectedDay && (
                             <p>Horario seleccionado: {selectedDay} - Bloque: {selectedTime}</p>
                         )}

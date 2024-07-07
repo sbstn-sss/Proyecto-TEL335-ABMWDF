@@ -66,10 +66,10 @@ export default function Reserva() {
           <div key={reservaAct.id}>
             <div className="header_res">
               <p className="font">Reserva Activa:</p>
-              <p className={(reservaAct.estado === "confirmada") ? 'Confirm' : 'Pending'}>
+              <p className={(reservaAct.estado === "confirmada") ? 'Confirm_res' : 'Pending_res'}>
                 {reservaAct.confirmed ? 'Confirmada' : 'Por confirmar'}
               </p>
-              <button className="Cancel" onClick={() => handleCancel(reservaAct.id)}>Cancelar</button>
+              <button className="Cancel_res" onClick={() => handleCancel(reservaAct.id)}>Cancelar</button>
             </div>
             <div className="details">
               <p>Cancha: {reservaAct.id_cancha.nombre}</p>

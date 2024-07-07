@@ -42,37 +42,33 @@ export default function Canchas() {
     <div>
     <main>
     
-      <div className="container">
+      <div className="container_can">
           
         <div style={{justifyContent: "space-between"}}>
   
-          <h1 className="font">Canchas</h1>
-  
-          <button className="filter">filtrar</button>
+          <h1>Canchas</h1>
     
         </div>
   
 
 
-        <div className="caja">
-          <h1 className="font">San Joaquín</h1>
-          <div>
-  
-            
+        <div className="caja_can">
+          <h2>San Joaquín</h2>
+          <div className='canchas_disp'>
 
-          {canchas.map((cancha, index) => (
-            <div className="header" key={index}>
-              <p>{cancha.nombre}</p>
-              <button
-                className="B5"
-                style={{
-                  backgroundImage: `url(images/${cancha.photo})`,
-                  // Otros estilos para el botón
-                }}
-                onClick={() => handleButton(cancha.slug)}
-              ></button>
-            </div>
-          ))}
+            {canchas.map((cancha, index) => (
+              <div className="header_can" key={index}>
+                <p>{cancha.nombre}</p>
+                <button
+                  className="B5"
+                  style={{
+                    backgroundImage: `url(images/${cancha.photo})`,
+                    // Otros estilos para el botón
+                  }}
+                  onClick={() => handleButton(cancha.slug)}
+                ></button>
+              </div>
+            ))}
   
           </div>
         </div>
