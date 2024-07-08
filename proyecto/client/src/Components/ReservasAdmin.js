@@ -3,87 +3,61 @@ import { useCookies } from 'react-cookie';
 import './css/admin.css';
 
 export default function ReservaAdmin() {
-  const [cookies] = useCookies(['jwt', 'tipo_usuario']);
+  const [cookies] = useCookies(['jwt']);
   const [reservas, setReservas] = useState([]);
-  const [redirected, setRedirected] = useState(false);
 
-  useEffect(() => {
-    if (cookies.tipo_usuario !== 'admin') {
-      if (!redirected) {
-        alert('No tienes permisos de administrador.');
-        setRedirected(true);
-        window.location.href = '/';
-      }
-    } else {
-      fetchCanchasAndReservas();
-    }
-  }, [cookies.role, redirected]);
+  const hoy = new Date();
+  const dia = hoy.getDate();
+  const mes = hoy.getMonth() + 1; 
+  const año = hoy.getFullYear();
 
-  const fetchCanchasAndReservas = () => {
-    fetch('http://127.0.0.1:8080/api/canchas/', {
-      method: 'GET',
-      credentials: 'include',
-      headers: {
-        'Authorization': `Bearer ${cookies.jwt}`
-      }
-    })
-    .then(response => response.json())
-    .then(data => {
-      setReservas([]);
+  var d = dia < 10 ? "0" + dia.toString() : dia.toString();
+  var m = mes < 10 ? "0" + mes.toString() : mes.toString();
+  var a = año.toString();
 
-      data.data.canchas.forEach(element => {
-        fetchReservasForToday(element.slug);
-      });
-    })
-    .catch(error => {
-      console.error('Error fetching courts:', error);
-    });
-  };
-
-  const fetchReservasForToday = (slugCancha) => {
-    const hoy = new Date();
-    const formatoFecha = (fecha) => {
-      const dia = fecha.getDate().toString().padStart(2, '0');
-      const mes = (fecha.getMonth() + 1).toString().padStart(2, '0'); // Mes empieza en 0
-      const año = fecha.getFullYear();
-      return `${dia}-${mes}-${año}`;
-    };
-
-    const fechaHoy = formatoFecha(hoy);
-    const url = `http://127.0.0.1:8080/api/reservas/${slugCancha}/${fechaHoy}`;
-
+  const actualizarReserva = (idReserva) => {
+    const url = `http://127.0.0.1:8080/api/reservas/${idReserva}`;
+  
     fetch(url, {
-      method: 'GET',
-      credentials: 'include',
+      method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${cookies.jwt}`
-      }
+        'Authorization': `Bearer ${cookies.jwt}`  // Suponiendo que tienes un token JWT almacenado en cookies
+      },
     })
     .then(response => response.json())
     .then(data => {
-      setReservas(prevReservas => [...prevReservas, ...data.data.reservas]);
+      if (data.status === 'success') {
+        console.log('Reserva actualizada:', data);
+        window.location.reload();
+      } else {
+        console.log('Error al actualizar la reserva:', data);
+      }
     })
     .catch(error => {
-      console.error(`Error fetching reservations for ${slugCancha} on ${fechaHoy}:`, error);
+      console.error('Error en la solicitud:', error);
     });
   };
 
-  const handleCancel = (reservationId) => {
-    fetch(`http://127.0.0.1:8080/api/users/reservas/${reservationId}`, {
-      method: 'DELETE',
+  useEffect(() => {
+    fetchCanchasAndReservas();
+  }, [cookies.jwt]);
+
+  const fetchCanchasAndReservas = () => {
+    fetch(`http://127.0.0.1:8080/api/reservas/dia/${d}-${m}-${a}`, {
+      method: 'GET',
       credentials: 'include',
       headers: {
         'Authorization': `Bearer ${cookies.jwt}`
       }
     })
-    .then(response => {
-      if (response.ok) {
-        setReservas(prevReservas => prevReservas.filter(reserva => reserva._id !== reservationId));
-        console.log('Reserva cancelada exitosamente');
-      } else {
-        console.error('Error al cancelar la reserva');
-      }
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success' && data.data && data.data.reservas) {
+            setReservas(data.data.reservas);
+        } else {
+            console.log('No hay reservas disponibles o la respuesta no tiene el formato esperado.');
+        }
     })
     .catch(error => {
       console.error('Error al cancelar la reserva:', error);
@@ -95,13 +69,30 @@ export default function ReservaAdmin() {
       <h1>Reservas Administrativas</h1>
       {reservas.length > 0 ? (
         <div className="reservas-grid">
+
+          <div className="reserva-box">
+
+            <h5 className="Space">Rol </h5>
+            <h5 className="Space">Cancha </h5>
+            <h5 className="Space">Bloque </h5>
+            <h5 className="Space">Estado </h5>
+
+          </div>
+
           {reservas.map((reserva, index) => (
-            <div className="reserva-box" key={index}>
-              <h2 className="font">Reserva {index + 1}</h2>
-              <p>Cancha: {reserva.id_cancha.nombre}</p>
-              <p>Fecha: {reserva.dia_reservado}</p>
-              <p>Hora: {reserva.bloque}</p>
-              <button onClick={() => handleCancel(reserva._id)}>Cancelar Reserva</button>
+            <div className="reserva-box" key={reserva._id}>
+              <h4 >{reserva.rol}</h4>
+              <h4 >{reserva.id_cancha.nombre}</h4>
+              <h4 >{reserva.bloque}</h4>
+              {(() => {
+                if (reserva.estado == "confirmada") {
+                  return <h4 style={{ color: "#33ff33", fontWeight: 'normal' }}>Confirmada</h4>
+                } else if (reserva.estado == "sin-confirmar" && reserva.activa) {
+                  return  <button className='Confirm' onClick={() => actualizarReserva(reserva._id)}>Confirmar</button>
+                } else {
+                  return  <h4 style={{ color: "#d60019", fontWeight: 'normal' }}>Cancelada</h4>
+                }
+              })()}
             </div>
           ))}
         </div>
