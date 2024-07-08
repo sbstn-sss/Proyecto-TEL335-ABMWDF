@@ -3,12 +3,21 @@ import { useCookies } from 'react-cookie';
 import './css/admin.css';
 
 export default function ReservaAdmin() {
-  const [cookies] = useCookies(['jwt']);
+  const [cookies] = useCookies(['jwt', 'tipo_usuario']);
   const [reservas, setReservas] = useState([]);
+  const [redirected, setRedirected] = useState(false);
 
   useEffect(() => {
-    fetchCanchasAndReservas();
-  }, [cookies.jwt]);
+    if (cookies.tipo_usuario !== 'admin') {
+      if (!redirected) {
+        alert('No tienes permisos de administrador.');
+        setRedirected(true);
+        window.location.href = '/';
+      }
+    } else {
+      fetchCanchasAndReservas();
+    }
+  }, [cookies.role, redirected]);
 
   const fetchCanchasAndReservas = () => {
     fetch('http://127.0.0.1:8080/api/canchas/', {
@@ -21,8 +30,7 @@ export default function ReservaAdmin() {
     .then(response => response.json())
     .then(data => {
       setReservas([]);
-      
-      // Recorrer las canchas y obtener las reservas para cada una usando el slug
+
       data.data.canchas.forEach(element => {
         fetchReservasForToday(element.slug);
       });
@@ -71,9 +79,7 @@ export default function ReservaAdmin() {
     })
     .then(response => {
       if (response.ok) {
-        // Actualizar el estado local para reflejar la cancelación
         setReservas(prevReservas => prevReservas.filter(reserva => reserva._id !== reservationId));
-        // Mostrar una notificación o mensaje de éxito
         console.log('Reserva cancelada exitosamente');
       } else {
         console.error('Error al cancelar la reserva');
