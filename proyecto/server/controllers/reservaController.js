@@ -177,13 +177,14 @@ exports.createReserva = catchAsync(async (req, res, next) => {
     for (let i = 0; i < num_semanas; i++) {
       // Crear una nueva fecha para cada semana
       let fechaReserva = new Date(fechaInicial);
-      fechaReserva.setDate(fechaInicial.getDate() + 1 + (i * 7)); // Incrementar la fecha en 7 días para cada semana
+      fechaReserva.setDate(fechaInicial.getDate() + (i * 7)); // Incrementar la fecha en 7 días para cada semana
 
       // Formatear la fecha en formato dd-MM-YYYY
       const dia_fecha = fechaReserva.getDate().toString().padStart(2, '0');
       const mes_fecha = (fechaReserva.getMonth() + 1).toString().padStart(2, '0');
       const year_fecha = fechaReserva.getFullYear();
       const fechaFormateada = [dia_fecha, mes_fecha, year_fecha].join('-');
+      console.log('Reservando el dia:', fechaFormateada);
 
       // Crear una reserva para esta fecha
       const reserva = await Reserva.create({

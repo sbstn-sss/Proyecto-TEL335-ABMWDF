@@ -5,7 +5,7 @@ import './css/reserva.css';
 
 export default function Reserva() {
   const [reservas, setReservas] = useState([]);
-  const [cookies] = useCookies(['jwt']);
+  const [cookies] = useCookies(['jwt','tipo_usuario']);
   const [reservaAct, setReservaAct] = useState(null);
 
   const fetchReservas = () => {
@@ -61,27 +61,32 @@ export default function Reserva() {
     <div className="container">
       <h1>Tus Reservas</h1>
       <div className="caja_res">
-        <h2>Estado</h2>
-        {reservaAct ? (
-          <div key={reservaAct.id}>
-            <div className="header_res">
-              <p className="font">Reserva Activa:</p>
-              <p className={(reservaAct.estado === "confirmada") ? 'Confirm_res' : 'Pending_res'}>
-                {reservaAct.confirmed ? 'Confirmada' : 'Por confirmar'}
-              </p>
-              <button className="Cancel_res" onClick={() => handleCancel(reservaAct.id)}>Cancelar</button>
-            </div>
-            <div className="details">
-              <p>Cancha: {reservaAct.id_cancha.nombre}</p>
-              <p>Fecha: {reservaAct.dia_reservado}</p>
-              <p>Bloque: {reservaAct.bloque}</p>
-            </div>
-          </div>
+        {(cookies.tipo_usuario === 'profesor') ? (
+          null // Renderiza nada si el usuario es profesor
         ) : (
-          <p>Usted no tiene ninguna reserva activa.</p>
+          <>
+            <h2>Estado</h2>
+            {reservaAct ? (
+              <div key={reservaAct.id}>
+                <div className="header_res">
+                  <p className="font">Reserva Activa:</p>
+                  <p className={reservaAct.estado === "confirmada" ? 'Confirm_res' : 'Pending_res'}>
+                    {reservaAct.estado === "confirmada" ? 'Confirmada' : 'Por confirmar'}
+                  </p>
+                  <button className="Cancel_res" onClick={() => handleCancel(reservaAct.id)}>Cancelar</button>
+                </div>
+                <div className="details">
+                  <p>Cancha: {reservaAct.id_cancha.nombre}</p>
+                  <p>Fecha: {reservaAct.dia_reservado}</p>
+                  <p>Bloque: {reservaAct.bloque}</p>
+                </div>
+              </div>
+            ) : (
+              <p>Usted no tiene ninguna reserva activa.</p>
+            )}
+          </>
         )}
-
-        <h2>Historial:</h2>
+        <h2>Dias Reservados:</h2>
         {reservas.length > 0 ? reservas
           .filter(reserva => !reserva.activa)
           .map((reserva, index) => (
