@@ -34,7 +34,13 @@ export default function SignUp() {
       }
 
     const Pressed = () => {
-        // Aquí defines la acción que deseas ejecutar
+          const body = JSON.stringify({
+            "name": name,
+            "rol": Rol,
+            "email": email,
+            "password": password,
+            "passwordConfirm": Cpassword
+        });
 
         if(name !== "" && email !== "" && password !== "" &&  Cpassword !=="" && Rol !== ""){
 
@@ -48,23 +54,20 @@ export default function SignUp() {
                     headers: {
                       'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({
-                        "name": name,
-                        "rol": Rol,
-                        "email": email,
-                        "password": password,
-                        "passwordConfirm": Cpassword
-                    }),
+                    body: body,
                   })
                     .then(response => response.json())
                     .then(data => {
                       // Maneja los datos recibidos
-                      //console.log(data);
-                      navigate("/Acceso");
+                      console.log(data);
+                      if(data.status === "success"){
+                        navigate("/Acceso");
+                      }
                     })
                     .catch(error => {
                       // Maneja cualquier error
                       console.error('Error:', error);
+                      alert("Hubo un error en el registre, intente nuevamente.");
                     });
             }
 
@@ -84,40 +87,40 @@ export default function SignUp() {
 
 
   return (
-    <div class="container">
-    <span class="icon-close"><ion-icon name="close-sharp"></ion-icon></span>
+    <div className="container">
+    <span className="icon-close"><ion-icon name="close-sharp"></ion-icon></span>
 
-    <div class="form-box login">
+    <div className="form-box login">
         <h2>Formulario de registro</h2>
         <form action="#">
 
-            <div class="input-box">
-                <span class="icon"><ion-icon name="mail-sharp"></ion-icon></span>
+            <div className="input-box">
+                <span className="icon"><ion-icon name="mail-sharp"></ion-icon></span>
                 <input type="text" value={name} onChange={handleName} required/>
                 <label>Nombre Completo</label>
             </div>
-            <div class="input-box">
-                <span class="icon"><ion-icon name="mail-sharp"></ion-icon></span>
+            <div className="input-box">
+                <span className="icon"><ion-icon name="mail-sharp"></ion-icon></span>
                 <input type="email" value={email} onChange={handleEmail} required/>
                 <label>Email</label>
             </div>
-            <div class="input-box">
-                <span class="icon"><ion-icon name="lock-closed-sharp"></ion-icon></span>
+            <div className="input-box">
+                <span className="icon"><ion-icon name="lock-closed-sharp"></ion-icon></span>
                 <input type="password" value={password} onChange={handlepassword} required/>
                 <label>Contraseña</label>
             </div>
-            <div class="input-box">
-                <span class="icon"><ion-icon name="lock-closed-sharp"></ion-icon></span>
+            <div className="input-box">
+                <span className="icon"><ion-icon name="lock-closed-sharp"></ion-icon></span>
                 <input type="password" value = {Cpassword} onChange={handleCpassword} required/>
                 <label> Confirme contraseña</label>
             </div>
-            <div class="input-box">
-                <span class="icon"><ion-icon name="lock-closed-sharp"></ion-icon></span>
+            <div className="input-box">
+                <span className="icon"><ion-icon name="lock-closed-sharp"></ion-icon></span>
                 <input type="text" value={Rol} onChange={handleRol} required/>
                 <label> Ingrese Rol USM</label>
             </div>
 
-            <button type="submit" class="minecraft_button" onClick={Pressed}>Registrar</button>
+            <button type="submit" className="minecraft_button" onClick={() =>{Pressed()}}>Registrar</button>
 
         </form>
     </div>

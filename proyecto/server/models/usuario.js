@@ -18,7 +18,7 @@ const usuarioSchema = new mongoose.Schema(
           // Expresión regular para validar el formato del rol
           const rolValido = /^(19[3-9][1-9]|19[3-9]0|200[0-9]|201[0-9]|202[0-4])[0-9]{5}-[0-9]$/;
           
-          console.log('rol ingresado', val, rolValido.test(val));
+          //console.log('rol ingresado', val, rolValido.test(val));
           
           return rolValido.test(val);
         },
