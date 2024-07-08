@@ -20,7 +20,7 @@ Somos un equipo de estudiantes que actualmente cursa la asignatura TEL-335 "Dise
 
 # Nuestro Objetivo🚩:
 <p align = "left">
-Nuestra solucion se enfoca en el desarrollo de una p ́agian web de reserva de
+Nuestra solucion se enfoca en el desarrollo de una página web de reserva de
 canchas, esta tiene on login y logout.
 </p> 
 
