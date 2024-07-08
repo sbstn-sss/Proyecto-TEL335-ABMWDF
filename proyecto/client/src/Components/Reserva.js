@@ -7,6 +7,19 @@ export default function Reserva() {
   const [reservas, setReservas] = useState([]);
   const [cookies] = useCookies(['jwt','tipo_usuario']);
   const [reservaAct, setReservaAct] = useState(null);
+  const [redirected, setRedirected] = useState(false);
+
+  useEffect(() => {
+    if (!cookies.jwt) {
+      if (!redirected) {
+        alert('Es necesario loguearse.');
+        setRedirected(true);
+        window.location.href = '/Acceso';
+      }
+    } else {
+      fetchReservas();
+    }
+  }, [cookies.jwt, redirected]);
 
   const fetchReservas = () => {
     fetch('http://127.0.0.1:8080/api/users/reservas/mine', {
